@@ -1,0 +1,48 @@
+schema: spec-driven
+
+context: |
+  One OpenSpec change = one GitHub issue (a sub-issue under its phase parent issue).
+  Name the change after the task ID, e.g. "p0-01-discovery-workshop" for issue #1 / P0-01.
+  The approved task spec dental-ai-tasks/tasks/<ID> *.md is the source of truth:
+  proposal.md summarises its sections 1-4, design.md follows sections 6-9,
+  tasks.md follows sections 7, 11 (acceptance criteria) and 12 (definition of done).
+  Do not invent scope beyond the spec; keep its "Proposed:" and "Verify:" markers.
+  A task merged into another (status: merged) is implemented by its survivor spec.
+  Follow CLAUDE.md rules: no PHI anywhere in the repo, only BAA-covered vendors, US-only Google Cloud.
+  Steps only a human can do (meetings, signatures, vendor portals) go in tasks.md as unchecked
+  items marked "(human)".
+
+rules:
+  tasks:
+    - The last task is "Open a PR into Development whose description says Closes #<issue number>"
+
+# Project context (optional)
+# Add only constraints that should guide OpenSpec artifacts and workflows.
+# Include constraints an agent cannot infer by reading the code.
+# Keep general project documentation and discoverable codebase facts out.
+# Example:
+#   context: |
+#     Designs and tasks must cover Windows, macOS, and Linux
+#     Write all artifacts in Spanish
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
