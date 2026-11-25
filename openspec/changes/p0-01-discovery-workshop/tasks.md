@@ -27,7 +27,7 @@ Tasks marked **(human)** can't be done by an agent. Leave them unchecked until a
 ## 4. Finish
 
 - [x] 4.1 After sign-off, set the log's version to 1.0 and add the approval line to its header. Verify: the header links to `signoff-YYYY-MM-DD.pdf`.
-- [ ] 4.2 Commit with a one-line message and ask the user before pushing `task/p0-01-discovery-workshop`. Verify: `git log -1 --format=%s` is one line and nothing was pushed without approval.
+- [ ] 4.2 Commit with a one-line message and ask the user before pushing `feature/phase-0-discovery-compliance`. Verify: `git log -1 --format=%s` is one line and nothing was pushed without approval.
 
 ## Workflow follow-up
 

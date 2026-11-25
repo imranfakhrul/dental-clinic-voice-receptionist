@@ -99,7 +99,7 @@ cd frontend && pnpm install && pnpm test
 
 ## Workflow per GitHub issue (OpenSpec)
 1. Pick a sub-issue under its phase parent and check that its "Depends on" issues are closed.
-2. Create a branch `task/<id>-<slug>` from `Development` (e.g. `task/p0-01-discovery-workshop`).
+2. Work on the phase branch `feature/phase-<N>-<name>` (e.g. `feature/phase-0-discovery-compliance`). There is one branch per parent issue/phase, and every sub-issue of that phase is committed on it.
 3. `/opsx:propose <id>-<slug>: implement issue #N from dental-ai-tasks/tasks/<ID>*.md`. Review the result;
    use `/opsx:update` to revise it.
 4. `/opsx:apply` to implement. Commit with a **one-line message**. **Always ask before pushing.**
@@ -115,7 +115,7 @@ cd frontend && pnpm install && pnpm test
   (newest at the bottom). Never delete rows; a new row supersedes the old one.
 - **Spec edits:** keep specs coherent with `PROJECT_OVERVIEW.md` and the other specs that reference them. When a task
   is merged or split, update `_CONSOLIDATION.md`.
-- **Git:** work on `task/<id>-<slug>` branches from `Development`; the senior merges into `main`.
+- **Git:** one branch per phase (`feature/phase-0-discovery-compliance`, `feature/phase-1-core-platform`, …; full list in README.md); the next phase branch starts from `main` after the previous one is merged. The senior merges into `main`.
   Commit messages are one line. Never push without asking first.
 - **GitHub:** repo `imranfakhrul/dental-clinic-voice-receptionist`. Sub-issues are linked with
   `gh api -X POST repos/<repo>/issues/<parent>/sub_issues -F sub_issue_id=<issue database id>`. Use the
