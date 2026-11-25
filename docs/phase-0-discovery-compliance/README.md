@@ -24,7 +24,7 @@ Status values: ✅ done · 🟡 in progress · ⬜ not started.
 ### E0.1 Clinic discovery
 | Issue | Task | Size | Depends on | Main output | Status |
 |---|---|---|---|---|---|
-| #1 | P0-01 Run discovery workshop with pilot clinic | M | - | `docs/discovery/` (pre-read, questionnaire, decision log, sign-off) | 🟡 documents done; issue comments pending |
+| #1 | P0-01 Run discovery workshop with pilot clinic | M | - | `docs/discovery/` (pre-read, questionnaire, decision log, sign-off) | ✅ |
 | #2 | P0-02 Appointment-type mapping | S | #1 | `docs/discovery/appointment-type-mapping.md` | ⬜ |
 | #3 | P0-03 Draft emergency protocol (Tier 1/2/3) | M | #1 | `docs/discovery/emergency-protocol.md`, `evals/emergency/` | ⬜ |
 | #4 | P0-04 Conversation flow designs | M | #1 | `docs/flows/` (overview, state machine), `evals/golden/` | ⬜ |
