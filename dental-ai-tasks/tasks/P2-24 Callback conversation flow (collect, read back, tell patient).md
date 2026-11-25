@@ -1,0 +1,11 @@
+---
+id: P2-24
+title: Callback conversation flow (collect, read back, tell patient)
+milestone: P2
+epic: E2.5
+size: M
+status: merged
+merged_into: P2-22
+---
+
+Merged into P2-22 to keep the whole project within about 70 issues (DECISIONS #76, `tasks/_CONSOLIDATION.md`). Its scope and acceptance criteria are now part of P2-22.
