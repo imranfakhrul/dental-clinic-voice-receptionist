@@ -102,8 +102,9 @@ cd frontend && pnpm install && pnpm test
 2. Create a branch `task/<id>-<slug>` from `Development` (e.g. `task/p0-01-discovery-workshop`).
 3. `/opsx:propose <id>-<slug>: implement issue #N from dental-ai-tasks/tasks/<ID>*.md`. Review the result;
    use `/opsx:update` to revise it.
-4. `/opsx:apply` to implement. Open a PR into `Development` with `Closes #N` in its description, then review and merge.
-5. `/opsx:archive` moves the change to `openspec/changes/archive/` and merges its specs into `openspec/specs/`.
+4. `/opsx:apply` to implement. Commit with a **one-line message**. **Always ask before pushing.**
+5. The senior merges into `main`; we never merge and don't open PRs unless asked.
+6. After the merge, `/opsx:archive` moves the change to `openspec/changes/archive/` and merges its specs into `openspec/specs/`.
 
 ## How to work in this repo
 - **Before changing anything, read the task spec** (`dental-ai-tasks/tasks/<ID>*.md`). Its acceptance criteria and
@@ -114,8 +115,8 @@ cd frontend && pnpm install && pnpm test
   (newest at the bottom). Never delete rows; a new row supersedes the old one.
 - **Spec edits:** keep specs coherent with `PROJECT_OVERVIEW.md` and the other specs that reference them. When a task
   is merged or split, update `_CONSOLIDATION.md`.
-- **Git:** work on `Development` or feature branches; the PR target is `main`. Commit or push only when asked.
-  The PR template includes a vendor and PHI checklist.
+- **Git:** work on `task/<id>-<slug>` branches from `Development`; the senior merges into `main`.
+  Commit messages are one line. Never push without asking first.
 - **GitHub:** repo `imranfakhrul/dental-clinic-voice-receptionist`. Sub-issues are linked with
   `gh api -X POST repos/<repo>/issues/<parent>/sub_issues -F sub_issue_id=<issue database id>`. Use the
   database id, not the issue number; `gh` 2.46 has no sub-issue flag.

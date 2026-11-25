@@ -15,6 +15,7 @@ It runs on Google Cloud (Gemini on Vertex AI, Speech-to-Text, Text-to-Speech, Cl
 | [dental-ai-tasks/PDF/](dental-ai-tasks/PDF/) | All task specs in one PDF |
 | [dental-ai-tasks/DECISIONS.md](dental-ai-tasks/DECISIONS.md) | Decision log |
 | [dental-ai-tasks/GLOSSARY.md](dental-ai-tasks/GLOSSARY.md) | Terms (PHI, BAA, PatNum, eConnector, …) |
+| [docs/discovery/clinic-decision-log.md](docs/discovery/clinic-decision-log.md) | Clinic decisions from the discovery workshop (P0-01) |
 
 ## Branches
 | Branch | Purpose |
@@ -45,4 +46,4 @@ The phase branches:
 5. After the merge, `/opsx:archive` closes out each OpenSpec change, and the sub-issues are closed.
 
 ## Status
-Planning is complete: 70 approved task specs. Phase 0 is in progress on `feature/phase-0-discovery-compliance`.
+Planning is complete: 70 approved task specs. Phase 0 is in progress on `feature/phase-0-discovery-compliance`; progress is tracked in GitHub issue #17 and its sub-issues.
