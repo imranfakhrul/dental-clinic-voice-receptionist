@@ -1,0 +1,144 @@
+# Synthetic, complete appointment-type mapping for tests (P1-19, P1-20, P2-16).
+# All Open Dental numbers are fake. Contains no PHI. Do not use as clinic data.
+# Covers: all 15 reason codes; new vs existing variants (toothache); an age-limited
+# child variant listed first (child_visit, recall_cleaning); not_offered; callback.
+schema_version: 1
+clinic_slug: example-dental
+mapping_version: "1.0"
+status: approved
+approved_by: ["J. Doe, office manager", "Dr. A. Smith, dentist"]
+approved_on: "2026-12-10"
+od_time_increment_min: 10
+reasons:
+  - code: new_patient_exam
+    label: "New patient exam"
+    bookable_by_ai: true
+    variants:
+      - patient_types: [new]
+        age_min: null
+        age_max: null
+        appointment_type: {od_appointment_type_num: 101, od_name: "New Patient Exam", duration_min: 60}
+        providers: [{od_prov_num: 11, od_abbr: "DDS1"}, {od_prov_num: 12, od_abbr: "DDS2"}]
+        operatory_nums: [21, 22]
+    when_not_bookable: callback
+    notes: ""
+  - code: recall_cleaning
+    label: "Cleaning and checkup"
+    bookable_by_ai: true
+    variants:
+      - patient_types: [existing]
+        age_min: null
+        age_max: 17
+        appointment_type: {od_appointment_type_num: 103, od_name: "Child Recall", duration_min: 40}
+        providers: [{od_prov_num: 13, od_abbr: "HYG1"}]
+        operatory_nums: [23]
+      - patient_types: [existing]
+        age_min: 18
+        age_max: null
+        appointment_type: {od_appointment_type_num: 102, od_name: "Recall", duration_min: 60}
+        providers: [{od_prov_num: 13, od_abbr: "HYG1"}, {od_prov_num: 14, od_abbr: "HYG2"}]
+        operatory_nums: [23, 24]
+    when_not_bookable: callback
+    notes: ""
+  - code: child_visit
+    label: "Child checkup"
+    bookable_by_ai: true
+    variants:
+      - patient_types: [new, existing]
+        age_min: null
+        age_max: 17
+        appointment_type: {od_appointment_type_num: 103, od_name: "Child Recall", duration_min: 40}
+        providers: [{od_prov_num: 13, od_abbr: "HYG1"}]
+        operatory_nums: []
+    when_not_bookable: callback
+    notes: "Adults asking for a child visit fall back to callback (no adult variant)"
+  - code: toothache
+    label: "Toothache"
+    bookable_by_ai: true
+    variants:
+      - patient_types: [existing]
+        age_min: null
+        age_max: null
+        appointment_type: {od_appointment_type_num: 104, od_name: "Limited Exam", duration_min: 30}
+        providers: [{od_prov_num: 11, od_abbr: "DDS1"}]
+        operatory_nums: []
+      - patient_types: [new]
+        age_min: null
+        age_max: null
+        appointment_type: {od_appointment_type_num: 101, od_name: "New Patient Exam", duration_min: 60}
+        providers: [{od_prov_num: 11, od_abbr: "DDS1"}]
+        operatory_nums: []
+    when_not_bookable: callback
+    notes: "Two variants: new vs existing patient"
+  - code: sensitivity
+    label: "Tooth sensitivity"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: broken_tooth
+    label: "Broken or chipped tooth"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: lost_filling_or_crown
+    label: "Lost filling or crown"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: gum_problem
+    label: "Gum problem"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: wisdom_tooth
+    label: "Wisdom tooth"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: denture_problem
+    label: "Denture problem"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: not_offered
+    notes: "Example of a service the clinic does not offer"
+  - code: cosmetic_consult
+    label: "Cosmetic consultation"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: "Offered, but staff book it"
+  - code: ortho_consult
+    label: "Braces / aligners"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: not_offered
+    notes: "Clinic does not offer orthodontics"
+  - code: emergency_exam
+    label: "Urgent dental visit"
+    bookable_by_ai: true
+    variants:
+      - patient_types: [new, existing]
+        age_min: null
+        age_max: null
+        appointment_type: {od_appointment_type_num: 104, od_name: "Limited Exam", duration_min: 30}
+        providers: [{od_prov_num: 11, od_abbr: "DDS1"}, {od_prov_num: 12, od_abbr: "DDS2"}]
+        operatory_nums: []
+    when_not_bookable: callback
+    notes: "Tier 2 urgent slot (P0-03)"
+  - code: treatment_followup
+    label: "Planned treatment"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: "Always a callback in the MVP"
+  - code: other
+    label: "Other"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""

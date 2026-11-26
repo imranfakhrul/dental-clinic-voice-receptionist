@@ -1,0 +1,125 @@
+# Appointment-type mapping: Example Dental Clinic (P0-02).
+# Clinic setup data only (no PHI). Human-readable table: docs/discovery/appointment-type-mapping.md
+# Sample values: replace them with the clinic's real setup data.
+schema_version: 1
+clinic_slug: example-dental-clinic
+mapping_version: "1.0"
+status: approved
+approved_by: ["Alex Sample, office manager", "Dr. Casey Example, dentist"]
+approved_on: "2026-11-26"
+od_time_increment_min: 10   # Verify: clinic's Open Dental time increment
+reasons:
+  - code: new_patient_exam
+    label: "New patient exam"
+    bookable_by_ai: true
+    variants:
+      - patient_types: ["new"]
+        age_min: null
+        age_max: null
+        appointment_type: {od_appointment_type_num: 1, od_name: "New Patient Exam", duration_min: 60}
+        providers: [{od_prov_num: 1, od_abbr: "DDS1"}]
+        operatory_nums: [1, 2]
+    when_not_bookable: callback
+    notes: "Q3: AI may book. New-patient block Tue/Thu 08:00-10:00 is clinic config (P1-19)"
+  - code: recall_cleaning
+    label: "Cleaning and checkup"
+    bookable_by_ai: true
+    variants:
+      - patient_types: ["existing"]
+        age_min: null
+        age_max: 17
+        appointment_type: {od_appointment_type_num: 3, od_name: "Child Recall", duration_min: 40}
+        providers: [{od_prov_num: 2, od_abbr: "HYG1"}, {od_prov_num: 3, od_abbr: "HYG2"}]
+        operatory_nums: [3, 4]
+      - patient_types: ["existing"]
+        age_min: 18
+        age_max: null
+        appointment_type: {od_appointment_type_num: 2, od_name: "Recall", duration_min: 60}
+        providers: [{od_prov_num: 2, od_abbr: "HYG1"}, {od_prov_num: 3, od_abbr: "HYG2"}]
+        operatory_nums: [3, 4]
+    when_not_bookable: callback
+    notes: "Q3: AI may book. Child variant listed first"
+  - code: child_visit
+    label: "Child checkup"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: "Q3: not a separate AI-bookable type; existing children use recall_cleaning"
+  - code: toothache
+    label: "Toothache"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: "Staff triage; severe pain is emergency_exam (P0-03)"
+  - code: sensitivity
+    label: "Tooth sensitivity"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: broken_tooth
+    label: "Broken or chipped tooth"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: "Severe cases are emergency_exam (P0-03)"
+  - code: lost_filling_or_crown
+    label: "Lost filling or crown"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: gum_problem
+    label: "Gum problem"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: wisdom_tooth
+    label: "Wisdom tooth"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: denture_problem
+    label: "Denture problem"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""
+  - code: cosmetic_consult
+    label: "Cosmetic consultation"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: "Offered; staff book it"
+  - code: ortho_consult
+    label: "Braces / aligners"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: not_offered
+    notes: "Clinic does not offer orthodontics"
+  - code: emergency_exam
+    label: "Urgent dental visit"
+    bookable_by_ai: true
+    variants:
+      - patient_types: ["new", "existing"]
+        age_min: null
+        age_max: null
+        appointment_type: {od_appointment_type_num: 4, od_name: "Limited Exam", duration_min: 30}
+        providers: [{od_prov_num: 1, od_abbr: "DDS1"}]
+        operatory_nums: [1, 2]
+    when_not_bookable: callback
+    notes: "Q3: AI may book. Tier 2 urgent slot (P0-03); emergency block 11:00-12:00 (B5)"
+  - code: treatment_followup
+    label: "Planned treatment"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: "Always a callback in the MVP"
+  - code: other
+    label: "Other"
+    bookable_by_ai: false
+    variants: []
+    when_not_bookable: callback
+    notes: ""

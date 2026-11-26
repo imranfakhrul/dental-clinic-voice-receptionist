@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "appointment_types.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "clinic_slug",
+    "mapping_version",
+    "status",
+    "od_time_increment_min",
+    "reasons"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "clinic_slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "mapping_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "approved"
+      ]
+    },
+    "approved_by": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "approved_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "od_time_increment_min": {
+      "enum": [
+        5,
+        10,
+        15
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "minItems": 15,
+      "items": {
+        "$ref": "#/$defs/reason"
+      }
+    }
+  },
+  "$defs": {
+    "reason_code": {
+      "enum": [
+        "new_patient_exam",
+        "recall_cleaning",
+        "child_visit",
+        "toothache",
+        "sensitivity",
+        "broken_tooth",
+        "lost_filling_or_crown",
+        "gum_problem",
+        "wisdom_tooth",
+        "denture_problem",
+        "cosmetic_consult",
+        "ortho_consult",
+        "emergency_exam",
+        "treatment_followup",
+        "other"
+      ]
+    },
+    "reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "label",
+        "bookable_by_ai",
+        "variants",
+        "when_not_bookable"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/reason_code"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "bookable_by_ai": {
+          "type": "boolean"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variant"
+          }
+        },
+        "when_not_bookable": {
+          "enum": [
+            "callback",
+            "not_offered"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "properties": {
+          "bookable_by_ai": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "variants": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "patient_types",
+        "age_min",
+        "age_max",
+        "appointment_type",
+        "providers",
+        "operatory_nums"
+      ],
+      "properties": {
+        "patient_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "new",
+              "existing"
+            ]
+          }
+        },
+        "age_min": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 120
+        },
+        "age_max": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 120
+        },
+        "appointment_type": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "od_appointment_type_num",
+            "od_name",
+            "duration_min"
+          ],
+          "properties": {
+            "od_appointment_type_num": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "od_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "duration_min": {
+              "type": "integer",
+              "minimum": 5,
+              "maximum": 480
+            }
+          }
+        },
+        "providers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "od_prov_num",
+              "od_abbr"
+            ],
+            "properties": {
+              "od_prov_num": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1
+              },
+              "od_abbr": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "operatory_nums": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  }
+}

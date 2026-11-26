@@ -10,6 +10,8 @@ Task spec: `dental-ai-tasks/tasks/P0-01 Run discovery workshop with pilot clinic
 | [questionnaire.md](questionnaire.md) | Questions Q1–Q11 (with Q4a/Q4b) and B1–B8, each with our Proposed default. The IDs are fixed. |
 | [clinic-decision-log.md](clinic-decision-log.md) | The answers, filled in live during the workshop and approved by the clinic SME. Downstream tasks cite it as "P0-01 Q10". |
 | [review-checklist.md](review-checklist.md) | Checks a second team member completes before the log goes to the SME. |
+| [appointment-type-mapping.md](appointment-type-mapping.md) | P0-02: which visit reasons map to which Open Dental appointment type, duration and providers, and what the AI may book. Source: the seed YAML under `backend/app/domain/clinic_config/seed/`. |
+| [appointment-type-workbook.xlsx](appointment-type-workbook.xlsx) | P0-02: workbook the clinic fills in from Open Dental setup lists (never patient screens) |
 | `signoff-YYYY-MM-DD.pdf` | The SME's written approval ("I approve version 1.0 of the clinic decision log"), added after sign-off. |
 
 ## Workshop: 90 minutes
