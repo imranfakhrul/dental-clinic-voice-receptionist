@@ -1,0 +1,16 @@
+{
+  "$comment": "P0-13 spike only: a small subset of the P0-04 slots (docs/flows/overview.md). P2-05 owns the production schema.",
+  "type": "object",
+  "properties": {
+    "intent": {"type": "string", "nullable": true, "description": "null when the turn only answers the assistant's question", "enum": ["book", "reschedule", "cancel", "check_appointment", "faq", "callback", "emergency", "other"]},
+    "second_intent": {"type": "string", "nullable": true, "enum": ["book", "reschedule", "cancel", "check_appointment", "faq", "callback", "emergency", "other"]},
+    "first_name": {"type": "string", "nullable": true},
+    "last_name": {"type": "string", "nullable": true},
+    "dob": {"type": "string", "nullable": true, "description": "YYYY-MM-DD"},
+    "phone": {"type": "string", "nullable": true, "description": "10 digits"},
+    "preferred_day": {"type": "string", "nullable": true, "enum": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "any"]},
+    "preferred_part": {"type": "string", "nullable": true, "enum": ["morning", "afternoon", "any"]},
+    "reason_code": {"type": "string", "nullable": true, "enum": ["new_patient_exam", "recall_cleaning", "child_visit", "toothache", "sensitivity", "broken_tooth", "lost_filling_or_crown", "gum_problem", "wisdom_tooth", "denture_problem", "cosmetic_consult", "ortho_consult", "emergency_exam", "treatment_followup", "other"]}
+  },
+  "required": ["intent", "second_intent", "first_name", "last_name", "dob", "phone", "preferred_day", "preferred_part", "reason_code"]
+}

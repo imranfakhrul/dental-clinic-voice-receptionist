@@ -49,6 +49,7 @@ Current main specs:
 | [vendor-baa-matrix](../openspec/specs/vendor-baa-matrix/spec.md) | P0-10 |
 | [risk-assessment](../openspec/specs/risk-assessment/spec.md) | P0-11 |
 | [open-dental-access](../openspec/specs/open-dental-access/spec.md) | P0-12 |
+| [gemini-models](../openspec/specs/gemini-models/spec.md) | P0-13 |
 
 ---
 
@@ -229,10 +230,25 @@ Also updated by P0-12:
 - `docs/compliance/README.md`: notes for P1-15, P1-16, P1-20, P3-14, P1-06, P0-10/P0-11.
 - `docs/phase-0-discovery-compliance/README.md`: #13 status.
 
+### ✅ P0-13 Gemini models per tier (#14)
+| File | What it's for |
+|---|---|
+| [docs/adr/0001-gemini-models.md](adr/0001-gemini-models.md) | **Main file:** which Gemini model each tier uses and why, the two setups (Vertex for real use, Developer API for local tests), required settings |
+| [docs/runbooks/gemini-model-lifecycle.md](runbooks/gemini-model-lifecycle.md) | Retirement reminders, monthly check, how to change a model safely |
+| [evals/spike/p0-13/](../evals/spike/p0-13/README.md) | Test set (30 extraction, 20 replies, 10 complex; all fake), `schema.json`, `run_spike.py`, 17 offline tests, `requirements.txt` (pinned `google-genai`) |
+| `openspec/changes/archive/2026-11-26-p0-13-gemini-models/` | The task plan (archived; live run deferred) |
+
+Also updated by P0-13:
+- `.env.example`: Gemini and Vertex settings (no values).
+- `docs/compliance/sources/README.md`: sources G1–G12 (Google model, residency, caching, pricing and Developer API pages).
+- `dental-ai-tasks/DECISIONS.md`: #315 (tiers), #316 (two backends), #317 (what's pending).
+- `docs/compliance/vendors.yaml` and `vendor-matrix.md`: new row `google-ai-studio` (no PHI, local only).
+- `docs/compliance/README.md`: notes for P2-03, P2-05, P3-01/P3-14, P5-01, P0-10/P0-11/P0-14.
+- `docs/phase-0-discovery-compliance/README.md`: #14 status.
+
 ### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
 | Task | Will create | What it'll be for |
 |---|---|---|
-| P0-13 (#14) | `docs/adr/0001-gemini-models.md`, `evals/spike/p0-13/` | Which Gemini model versions we use per tier, and the test results |
 | P0-14 (#15) | `docs/architecture/` | Architecture document and patient-data flow diagram |
 | P0-15 (#16) | `docs/messaging/templates.yaml`, `scripts/messaging/` | WhatsApp test number and templates now; SMS sender registration before go-live |
 

@@ -1,0 +1,108 @@
+# P0-13 spike: intent and slot extraction (30 items). SYNTHETIC ONLY: fictional names, 555-01xx phones.
+# `expect` lists only the fields that are scored; unlisted fields are not scored. A null in `expect`
+# means the model must return null (no invented values). Day names are lower-case; dob is YYYY-MM-DD;
+# phone is 10 digits.
+today: "Monday 2026-11-30"
+items:
+  - id: X01
+    utterance: "Hi, I'd like to book a cleaning please."
+    expect: {intent: book, reason_code: recall_cleaning, first_name: null, phone: null}
+  - id: X02
+    utterance: "I need to move my appointment to next Tuesday afternoon."
+    expect: {intent: reschedule, preferred_day: tuesday, preferred_part: afternoon}
+  - id: X03
+    utterance: "Please cancel my appointment, I can't make it."
+    expect: {intent: cancel, reason_code: null}
+  - id: X04
+    utterance: "When is my next appointment?"
+    expect: {intent: check_appointment}
+  - id: X05
+    utterance: "Do you take walk-ins on Saturdays?"
+    expect: {intent: faq, preferred_day: null}
+  - id: X06
+    utterance: "My face is really swollen and I've got a fever since last night."
+    expect: {intent: emergency}
+  - id: X07
+    utterance: "Can someone from the office just call me back? My number is 503 555 0142."
+    expect: {intent: callback, phone: "5035550142"}
+  - id: X08
+    utterance: "My name is Maria Lopez, date of birth March fourteenth, nineteen eighty-five."
+    context: "The assistant asked for the patient's name and date of birth."
+    expect: {first_name: Maria, last_name: Lopez, dob: "1985-03-14"}
+  - id: X09
+    utterance: "It's Daniel Hughes, born ten ten ninety."
+    context: "The assistant asked for the patient's name and date of birth."
+    expect: {first_name: Daniel, last_name: Hughes, dob: "1990-10-10"}
+  - id: X10
+    utterance: "Birthday is the 2nd of June 1979."
+    context: "The assistant asked for the date of birth."
+    expect: {dob: "1979-06-02"}
+  - id: X11
+    utterance: "Date of birth 07/09/2015."
+    context: "The assistant asked for the child's date of birth. The clinic is in the US."
+    expect: {dob: "2015-07-09"}
+  - id: X12
+    utterance: "My cell is five oh three, five five five, oh one two three."
+    context: "The assistant asked for a phone number."
+    expect: {phone: "5035550123"}
+  - id: X13
+    utterance: "You can reach me at (503) 555-0177."
+    context: "The assistant asked for a phone number."
+    expect: {phone: "5035550177"}
+  - id: X14
+    utterance: "Last name is O apostrophe N E I L, first name Anne-Marie."
+    context: "The assistant asked the patient to spell their name."
+    expect: {first_name: Anne-Marie, last_name: "O'Neil"}
+  - id: X15
+    utterance: "Núñez, N U N E Z with the little marks, José."
+    context: "The assistant asked the patient to spell their last name, then first name."
+    expect: {first_name: "José", last_name: "Núñez"}
+  - id: X16
+    utterance: "Wednesday morning works. No wait, actually Thursday is better."
+    context: "The assistant asked which day suits the patient."
+    expect: {preferred_day: thursday, preferred_part: morning}
+  - id: X17
+    utterance: "No, not Tuesday. Friday."
+    context: "The assistant offered Tuesday at 10am."
+    expect: {preferred_day: friday}
+  - id: X18
+    utterance: "Anytime is fine, I'm flexible."
+    context: "The assistant asked when the patient would like to come in."
+    expect: {preferred_day: any, preferred_part: any}
+  - id: X19
+    utterance: "I want to cancel Thursday's cleaning and book a checkup for my son instead."
+    expect: {intent: cancel, second_intent: book}
+  - id: X20
+    utterance: "Can you tell me your hours, and also book me in for a filling?"
+    expect: {intent: book, second_intent: faq}
+  - id: X21
+    utterance: "I chipped my front tooth on a fork, it doesn't hurt much."
+    expect: {intent: book, reason_code: broken_tooth}
+  - id: X22
+    utterance: "My crown fell off while I was eating."
+    expect: {intent: book, reason_code: lost_filling_or_crown}
+  - id: X23
+    utterance: "I'm new here and need a first exam."
+    expect: {intent: book, reason_code: new_patient_exam}
+  - id: X24
+    utterance: "My gums bleed every time I brush."
+    expect: {intent: book, reason_code: gum_problem}
+  - id: X25
+    utterance: "Do you do Invisalign? I'd like a consult."
+    expect: {intent: book, reason_code: ortho_consult}
+  - id: X26
+    utterance: "My dentures are rubbing and it's sore."
+    expect: {intent: book, reason_code: denture_problem}
+  - id: X27
+    utterance: "Hi, this is Bill Turner. Need a cleaning, mornings are best."
+    expect: {intent: book, first_name: Bill, last_name: Turner, reason_code: recall_cleaning, preferred_part: morning}
+  - id: X28
+    utterance: "Yeah hi um I'm calling about, uh, the appointment, I want to, you know, push it back a week."
+    expect: {intent: reschedule}
+  - id: X29
+    utterance: "Is it normal for my tooth to hurt after a filling? Should I take ibuprofen?"
+    expect: {intent: faq}
+  - id: X30
+    utterance: "Mary Ellen Van Der Berg, August fourteenth sixty-six."
+    context: "The assistant asked for the patient's name and date of birth."
+    expect: {first_name: Mary Ellen, last_name: Van Der Berg, dob: "1966-08-14"}

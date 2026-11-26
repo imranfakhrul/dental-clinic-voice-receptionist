@@ -2,6 +2,7 @@
 
 | File | What |
 |---|---|
+| [../adr/0001-gemini-models.md](../adr/0001-gemini-models.md) | **Gemini models ADR** (P0-13): tiers, two backends, data settings. Proposed |
 | [risk/](risk/) | **HIPAA risk assessment v1** (P0-11): [assessment](risk/risk-assessment-v1.md), [register](risk/risk-register.md) (38 risks, check `scripts/compliance/check_risk_register.py`), [safeguard coverage](risk/safeguard-coverage.md), [accepted risks](risk/accepted-risks.md) (none). Draft v1; final at P5-14 |
 | [vendor-matrix.md](vendor-matrix.md) | **Vendor/BAA matrix and PHI gate** (P0-10), generated from [vendors.yaml](vendors.yaml) (schema [vendors.schema.json](vendors.schema.json)). Gate today: **CLOSED** |
 | [pr-vendor-check.md](pr-vendor-check.md) | PR checklist text for P1-01, and the proposed CODEOWNERS entries (not active) |
@@ -94,7 +95,7 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P5-14 HIPAA readiness (from P0-09) | Checklist, commitments and the signed record as evidence | - |
 | P4-01 / P4-03 / P4-04 / P4-07 / P4-08 (from P0-07a) | Enforce `messaging_policy.yaml` (refuse disallowed channel, unknown or never-allowed fields); opt-out text in every message; both adapters, WhatsApp active for testing, SMS switched off until go-live | - |
 | P4-02 Consent (from P0-07a) | Consent names the channel and message types, carries the SMS risk notice, rates notice, STOP/HELP, "not required to book"; dated record; wording approved by the advisor | - |
-| P0-13 Gemini model choice (from P0-06) | Gemini only via `aiplatform.googleapis.com` (Developer API never enabled); US regional endpoint only, since the location policy doesn't cover global endpoints | - |
+| P0-13 Gemini model choice (from P0-06) | Gemini only via `aiplatform.googleapis.com` (Developer API never enabled); US regional endpoint only, since the location policy doesn't cover global endpoints | ✅ used in P0-13 (ADR 0001) |
 | P1-02 Terraform base (from P0-06) | `allowed_apis` from `infra/org/`; no `vpcaccess` (use Cloud Run Direct VPC egress); `servicenetworking` allowed by exception #295; perimeters to enforce after dry-run review; Cloud Run needs VPC-SC setup; Cloud SQL must use private IP | - |
 | P1-03 / P1-05 (from P0-06) | Not Assured Workloads (#295), so CMEK only where the plan requires it | - |
 | P1-06 CI/CD (from P0-06) | `ops` is outside every perimeter; CI needs an ingress rule; `iamcredentials` and `sts` are on the ops list; no SA keys (use Workload Identity Federation) | - |
@@ -114,7 +115,12 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P3-14 Latency (from P0-12; spec named P3-15) | Open Dental latency numbers come from the deferred smoke test; until then assume up to ~1 s per request plus queueing | - |
 | P1-06 CI/CD (from P0-12) | `pytest scripts/open_dental/`; nightly `smoke_test.py --target testdb` once (B) exists; integration tests serial per customer key; never against the hosted database | - |
 | P0-10 / P0-11 (from P0-12) | Open Dental row: $30 per location per month, permissions per DECISIONS #312 (updated in `vendors.yaml`). R12: least-privilege permissions requested but not granted yet (no developer key) | - |
+| P2-03 LLM provider and routing (from P0-13) | ADR 0001 §5: config keys, approved list, `VERTEX_LOCATION=us`, `thinking_level` per tier; startup checks (developer only with `APP_ENV=local`, no `global`, no `preview`/`exp`/`latest`, allowed list) as in `evals/spike/p0-13/run_spike.py check_config`; GenerateContent API (or Interactions with `store=false`); no grounding tools; SDK `google-genai` | - |
+| P2-05 Extraction (from P0-13) | Spike schema and 30 extraction items in `evals/spike/p0-13/`; `intent` is null when a turn only answers a question; failure patterns in the results summary once runs exist | - |
+| P3-01 / P3-14 Voice latency (from P0-13) | Vertex `us` TTFT not measured yet (no billing); Developer API numbers are indicative only; `gemini-3.8-live` noted as the Live API option (DECISIONS #69) | - |
+| P5-01 Eval harness (from P0-13) | Reuse the three spike sets as a starting suite; model-change procedure in `docs/runbooks/gemini-model-lifecycle.md` | - |
+| P0-10 / P0-11 / P0-14 (from P0-13) | Vendor row `google-ai-studio` (`phi: no`, local only, DECISIONS #316). R13: `cacheConfig` EPHEMERAL pending and abuse-monitoring question open, so R13 stays a planned control. Data-flow F2: `us` multi-region endpoint, no grounding, no request-response logging | - |
 | P5-14 HIPAA readiness (from P0-10) | `vendor-matrix.md` and the `--gate` output as evidence | - |
 | P0-05, P0-07, P0-08, P0-09 (from P0-10) | When a record turns ACCEPTED/SIGNED, set that row (or clinic) to `signed` with date and record, and re-render | - |
-| P0-13 Gemini model choice | Covered entries "Generative AI on Agent Platform" and "Gemini Enterprise Agent Platform" (Vertex AI renamed); GA models only | - |
+| P0-13 Gemini model choice | Covered entries "Generative AI on Agent Platform" and "Gemini Enterprise Agent Platform" (Vertex AI renamed); GA models only | ✅ used in P0-13 (ADR 0001) |
 | P1-02 Terraform base | `foundation.yaml`: **import** the four projects, never recreate them; the state bucket once Part B is done | - |

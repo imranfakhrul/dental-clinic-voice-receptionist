@@ -33,6 +33,7 @@ Why it's closed:
 | Open Dental (API relay) | Open Dental API, requests relayed to the clinic's eConnector | yes | dev, staging, prod | under_review | - | - | Sam Comply (compliance advisor) | P0-09, P0-12 |
 | GitHub | Source code, issues, pull requests, CI | no (control: Synthetic data only in code, fixtures, issues and screenshots; PR vendor and PHI check (pr-vendor-check.md); PHI-redacting logger (P1-07); public-repo scan before each commit) | team | not_required | - | - | Riley Tech (tech lead) | P1-01 |
 | AI coding assistant (Anthropic, Claude Code) | Reads the repository and terminal output while the team writes code and docs | no (control: Never given PHI: synthetic data only in the repo, terminal, test output and prompts; no access to prod data or the clinic's Open Dental) | team | not_required | - | - | Riley Tech (tech lead) | P0-10 |
+| Google AI Studio / Gemini Developer API | Gemini models via API key (local development and the P0-13 spike) | no (control: Synthetic data only; allowed only with APP_ENV=local (startup check, ADR 0001); key only in the git-ignored .env; never a production fallback. Free tier may be read by human reviewers and used to improve Google products (sources G10, G11)) | team | not_required | - | - | Riley Tech (tech lead) | P0-13, P2-03 |
 
 Notes:
 
@@ -41,6 +42,7 @@ Notes:
 - **meta-whatsapp:** Record says NOT ACCEPTED; Meta's terms say it isn't a business associate. Used now for testing only, synthetic data to team test numbers (messaging_policy.yaml allowed_with_phi: false).
 - **open-dental:** Counsel decides whether the clinic's own arrangement with Open Dental covers the relay (P0-09 Annex B open question). dev and staging use the Open Dental test database only. Fees: $30 per location per month, paid by us, while a key is enabled (P0-12, DECISIONS #312). No developer key yet.
 - **ai-coding-assistant:** Added for spec §14 (team tools that may see PHI by accident). If it is ever used on prod data or logs, it needs a BAA first.
+- **google-ai-studio:** Exception to CLAUDE.md rules 5-6 for local synthetic use (DECISIONS #316). Separate from the Google Cloud row: not a Google Cloud offering and not under the Cloud BAA.
 
 ## Clinics
 

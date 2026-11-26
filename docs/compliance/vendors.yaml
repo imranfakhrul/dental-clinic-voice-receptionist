@@ -80,6 +80,17 @@ vendors:
     tasks: [P0-10]
     notes: "Added for spec §14 (team tools that may see PHI by accident). If it is ever used on prod data or logs, it needs a BAA first."
 
+  - id: google-ai-studio
+    name: Google AI Studio / Gemini Developer API
+    services: [Gemini models via API key (local development and the P0-13 spike)]
+    phi: "no"
+    no_phi_control: "Synthetic data only; allowed only with APP_ENV=local (startup check, ADR 0001); key only in the git-ignored .env; never a production fallback. Free tier may be read by human reviewers and used to improve Google products (sources G10, G11)"
+    environments: [team]
+    baa: {status: not_required}
+    owner: "Riley Tech (tech lead)"
+    tasks: [P0-13, P2-03]
+    notes: "Exception to CLAUDE.md rules 5-6 for local synthetic use (DECISIONS #316). Separate from the Google Cloud row: not a Google Cloud offering and not under the Cloud BAA."
+
 clinics:
   - clinic_slug: example-dental
     baa: {status: pending, record: docs/compliance/baa-clinic-example-dental.md}

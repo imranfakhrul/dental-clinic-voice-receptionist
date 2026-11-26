@@ -1,0 +1,65 @@
+# P0-13 spike: multi-part and complaint conversations for the `pro` tier (10 items). SYNTHETIC ONLY.
+# The model returns the extraction JSON for the LAST patient turn, using the whole conversation. Scored like
+# extraction.yaml (`expect`), plus the same reply checks on a short reply when `reply_facts` is given.
+today: "Monday 2026-11-30"
+items:
+  - id: C01
+    turns:
+      - {who: patient, text: "I booked for Tuesday but my boss changed my shift."}
+      - {who: assistant, text: "I can help move it. What day works better?"}
+      - {who: patient, text: "Thursday, but only after lunch, and also my wife Karen needs a cleaning too if you have two slots together."}
+    expect: {intent: reschedule, second_intent: book, preferred_day: thursday, preferred_part: afternoon}
+  - id: C02
+    turns:
+      - {who: patient, text: "This is the third time I'm calling. Your system booked me on a holiday."}
+      - {who: assistant, text: "I'm sorry about that. Would you like me to find a new time?"}
+      - {who: patient, text: "Honestly I just want someone to call me. 503-555-0161."}
+    expect: {intent: callback, phone: "5035550161"}
+  - id: C03
+    turns:
+      - {who: patient, text: "Hi, I need to cancel for my daughter Lily and book her brother Liam."}
+      - {who: assistant, text: "Sure. Let's start with Lily's appointment. What's her date of birth?"}
+      - {who: patient, text: "July ninth twenty fifteen, same as Liam, they're twins."}
+    expect: {intent: cancel, second_intent: book, dob: "2015-07-09", first_name: Lily}
+  - id: C04
+    turns:
+      - {who: patient, text: "My tooth broke last week."}
+      - {who: assistant, text: "I'm sorry. Is it painful or swollen?"}
+      - {who: patient, text: "Not really painful. But I also want to ask about whitening while I'm there."}
+    expect: {intent: book, reason_code: broken_tooth}
+  - id: C05
+    turns:
+      - {who: patient, text: "Wednesday at 9?"}
+      - {who: assistant, text: "Wednesday at 9:00 AM is available with the hygienist. Shall I book it?"}
+      - {who: patient, text: "Hmm wait, is that the 2nd? I have a thing. Make it the following Monday, same time."}
+    expect: {intent: book, preferred_day: monday, preferred_part: morning}
+  - id: C06
+    turns:
+      - {who: patient, text: "I got charged for a missed appointment that I cancelled two days ahead!"}
+      - {who: assistant, text: "I'm sorry to hear that. I can't see billing here, but I can have the team call you."}
+      - {who: patient, text: "Fine. And while I'm here, when is my next visit?"}
+    expect: {intent: check_appointment, second_intent: callback}
+  - id: C07
+    turns:
+      - {who: patient, text: "I'm Grace Carter. I don't think you have my birthday on file."}
+      - {who: assistant, text: "Thanks Grace. What's your date of birth?"}
+      - {who: patient, text: "Five, seventeen, ninety-four. And my number changed, it's 503 555 0150 now."}
+    expect: {first_name: Grace, last_name: Carter, dob: "1994-05-17", phone: "5035550150"}
+  - id: C08
+    turns:
+      - {who: patient, text: "My husband's dentures cracked and he can't eat."}
+      - {who: assistant, text: "I'm sorry. Is he in pain or bleeding?"}
+      - {who: patient, text: "No pain, but he really needs them fixed this week, any morning."}
+    expect: {intent: book, reason_code: denture_problem, preferred_part: morning}
+  - id: C09
+    turns:
+      - {who: patient, text: "Can I reschedule?"}
+      - {who: assistant, text: "Of course. Which appointment, and when would you like?"}
+      - {who: patient, text: "Actually no, forget it, just cancel it. I'm moving to another state."}
+    expect: {intent: cancel, second_intent: null}
+  - id: C10
+    turns:
+      - {who: patient, text: "Your website said you're open Saturday."}
+      - {who: assistant, text: "We're closed on weekends. Our hours are Monday to Thursday 8 to 5 and Friday 8 to 2."}
+      - {who: patient, text: "Ugh. Ok then put me down for Friday morning for my checkup, I'm Owen Brooks."}
+    expect: {intent: book, preferred_day: friday, preferred_part: morning, first_name: Owen, last_name: Brooks, reason_code: recall_cleaning}
