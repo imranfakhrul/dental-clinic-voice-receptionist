@@ -2,6 +2,8 @@
 
 | File | What |
 |---|---|
+| [vendor-matrix.md](vendor-matrix.md) | **Vendor/BAA matrix and PHI gate** (P0-10), generated from [vendors.yaml](vendors.yaml) (schema [vendors.schema.json](vendors.schema.json)). Gate today: **CLOSED** |
+| [pr-vendor-check.md](pr-vendor-check.md) | PR checklist text for P1-01, and the proposed CODEOWNERS entries (not active) |
 | [baa-google-cloud.md](baa-google-cloud.md) | Google Cloud HIPAA BAA record. Status **NOT ACCEPTED**. Includes the covered-products snapshot (2026-11-26). P0-10 imports it into the vendor matrix. |
 | [bootstrap-checks-2026-11-26.md](bootstrap-checks-2026-11-26.md) | Output of the Google Cloud setup checks (P0-05) |
 | [baa-google-workspace.md](baa-google-workspace.md) | Google Workspace BAA record (P0-08): **NOT ACCEPTED**; no domain or Workspace until production |
@@ -20,6 +22,29 @@ Runbooks: [gcp-bootstrap.md](../runbooks/gcp-bootstrap.md), [org-guardrails-test
 ## Current state (2026-11-26)
 - **Google Cloud:** projects `dai-rcpt-dev`, `dai-rcpt-staging`, `dai-rcpt-prod` and `dai-rcpt-ops` exist in a personal Google account, with no organization (DECISIONS #293).
 - **Data:** synthetic only. **No PHI may enter any project.**
+
+## Vendor matrix and PHI gate (P0-10)
+Commands (run from the repo root):
+```bash
+python3 scripts/compliance/check_vendors.py            # validate rules C1-C9; exit 0 ok, 1 errors
+python3 scripts/compliance/check_vendors.py --render   # write vendor-matrix.md (never edit it by hand)
+python3 scripts/compliance/check_vendors.py --gate     # GATE OPEN (exit 0) or GATE CLOSED with reasons (exit 2)
+pytest scripts/compliance/                             # tests (needs pytest, pyyaml, jsonschema)
+```
+
+### How to add a vendor
+1. Add a row to `vendors.yaml` with `baa.status: pending` (or `phi: "no"` with a real `no_phi_control`) in the same change that introduces the vendor.
+2. Get the BAA through the vendor's task, and write its record `baa-<vendor>.md` in the P0-05 format.
+3. When the record says accepted or signed: set `baa.status: signed`, `date` and `record`.
+4. If it will receive the clinic's PHI: update Annex B of the clinic BAA and notify each clinic at least 30 days before PHI flows (P0-09 C8).
+5. Run `--render`, commit the YAML and `vendor-matrix.md` together.
+
+A vendor that won't sign a BAA stays `phi: "no"` with a real control, or is dropped. A dropped vendor keeps its row with "dropped on YYYY-MM-DD" in `notes` until its data is deleted.
+
+### Review routine
+- **Quarterly:** the compliance owner re-reads every row against its record, re-checks Google's covered-products list against `infra/org/allowed_services.yaml` (P0-06 owns it), updates `reviewed_on`, and re-renders. The checker warns (C9) after 100 days.
+- **On any change** (new vendor, new Google API, BAA signed or renewed, vendor dropped): update `vendors.yaml` in the same change.
+- Until CI exists (P1-06), run the checker locally before each commit that touches these files.
 
 ## Pending before real PHI
 Every item must be done before any real PHI enters `dai-rcpt-prod` (dev, staging and ops never get real PHI):
@@ -41,7 +66,7 @@ Every item must be done before any real PHI enters `dai-rcpt-prod` (dev, staging
 | Clinic ↔ company BAA ([baa-clinic-example-dental.md](baa-clinic-example-dental.md)): counsel finalizes template v1, sponsor decides outside-US access and names our signatory, both parties sign | Paper record, NOT SIGNED; no counsel engaged | P0-09 (DECISIONS #305, #306) |
 | Messaging BAA for the clinic's chosen channel: Twilio for SMS ([baa-twilio.md](baa-twilio.md)), Meta for WhatsApp ([baa-meta-whatsapp.md](baa-meta-whatsapp.md)) | Both NOT ACCEPTED; requests drafted, not sent; Meta's terms currently say it isn't a business associate | P0-07 (DECISIONS #299–#301) |
 | Callback email: company domain, Google Workspace and its BAA ([baa-google-workspace.md](baa-google-workspace.md)), `callbacks@` lock-down, SPF/DKIM/DMARC, TLS rule per clinic, readiness with the clinic's real domain | Bought for production; Workspace BAA NOT ACCEPTED | P0-08 (DECISIONS #303, #304) |
-| Vendor matrix lists every PHI vendor with a signed BAA | Not built | P0-10 |
+| Vendor matrix shows every PHI vendor signed and `check_vendors.py --gate` prints **GATE OPEN** | Matrix built; gate CLOSED (all BAAs pending) | P0-10 |
 
 ## Pending notifications
 These GitHub issues aren't closed yet or don't have this information. When each task starts, comment on its issue with the paths above.
@@ -51,8 +76,8 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P0-07 Messaging provider (from P0-07a) | Done in P0-07: Meta Cloud API direct for WhatsApp, Twilio for SMS (DECISIONS #300) | ✅ |
 | P0-15 Sender registration (from P0-07a) | WhatsApp test number and templates now; SMS sender (10DLC or toll-free verification) before go-live; templates may use only the fields in `messaging_policy.yaml` | - |
 | P0-15 Sender registration (from P0-07) | Meta Cloud API test number now; production WhatsApp and Twilio SMS registration steps in `docs/integrations/messaging-provider.md` §8 | - |
-| P0-10 Vendor matrix (from P0-07) | Rows for Meta and Twilio from `baa-meta-whatsapp.md` and `baa-twilio.md` (both NOT ACCEPTED); the test tunnel noted as test-only, no PHI | - |
-| P0-10 Vendor matrix (from P0-08) | Row for Google Workspace (Gmail) from `baa-google-workspace.md` (NOT ACCEPTED); Mailpit is a local dev tool, not a vendor | - |
+| P0-10 Vendor matrix (from P0-07) | Rows for Meta and Twilio from `baa-meta-whatsapp.md` and `baa-twilio.md` (both NOT ACCEPTED); the test tunnel noted as test-only, no PHI | ✅ done in P0-10 (`vendors.yaml`) |
+| P0-10 Vendor matrix (from P0-08) | Row for Google Workspace (Gmail) from `baa-google-workspace.md` (NOT ACCEPTED); Mailpit is a local dev tool, not a vendor | ✅ done in P0-10 (`vendors.yaml`) |
 | P2-23 Admin email sender (from P0-08) | Templates in `docs/integrations/admin-email/templates/`, config keys and load-time rules, keyless DWD design (`gmail.send`, `signJwt`), limits, logging rules, Mailpit for local dev (`docs/integrations/admin-email.md`) | - |
 | P2-22 Callback cases (from P0-08) | `case_id` must be a random opaque ID (it appears in emails and links) | - |
 | P4-13 / P4-14 (from P0-08) | Config keys `callback.*` and their rules; link format `/cases/{case_id}`; unsent-email alerts | - |
@@ -60,7 +85,7 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P4-01 / P4-06 / P4-07 (from P0-07) | Integration facts in `messaging-provider.md` §7: Graph API v27.0, `X-Hub-Signature-256`, status values, no WhatsApp STOP keyword handling (P4-07 must detect it), Twilio `X-Twilio-Signature` via SDK validator; **P4-06 runs the deferred live webhook test** | - |
 | P1-05 Secrets (from P0-07) | Create `whatsapp-access-token`, `whatsapp-app-secret`, `whatsapp-webhook-verify-token`; later `twilio-account-sid`, `twilio-auth-token`, `twilio-messaging-service-sid` | - |
 | P0-09 Clinic ↔ company BAA (from P0-07a) | Must mention subcontractors under their own BAAs, including the messaging vendors of the clinic's chosen channel: the SMS provider, or Meta and the WhatsApp provider (advisor answer 5, DECISIONS #299) | - |
-| P0-10 Vendor matrix (from P0-09) | Import Annex B (`baa/annex-b-subcontractors.md`) and the clinic BAA record (NOT SIGNED); the 30-day subcontractor notice (C8) is part of the matrix change process | - |
+| P0-10 Vendor matrix (from P0-09) | Import Annex B (`baa/annex-b-subcontractors.md`) and the clinic BAA record (NOT SIGNED); the 30-day subcontractor notice (C8) is part of the matrix change process | ✅ done in P0-10 (`vendors.yaml`) |
 | P0-11 Risk assessment (from P0-09) | Annex A as the data inventory; commitments C1–C22 as controls; open questions: outside-US access, Open Dental relay | - |
 | P0-12 Open Dental keys (from P0-09) | **The clinic's production key may not be requested until the clinic BAA record says SIGNED**; test database only | - |
 | P1-07 Audit log (from P0-09, spec named P1-12) | Audit retention 6 years (C20); audit entries must support the accounting-of-disclosures information (C10) | - |
@@ -74,6 +99,11 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P1-06 CI/CD (from P0-06) | `ops` is outside every perimeter; CI needs an ingress rule; `iamcredentials` and `sts` are on the ops list; no SA keys (use Workload Identity Federation) | - |
 | P1-07 Monitoring (from P0-06) | Alert on VPC-SC dry-run violations and org-policy changes once they exist | - |
 | P3-03 Speech-to-Text (from P0-06) | Re-check data logging (screenshot) when the API is enabled; code must never enable it | - |
-| P0-10 Vendor/BAA matrix | `baa-google-cloud.md` as the Google Cloud row: **NOT ACCEPTED**; `hipaa-controls.md` as guardrail evidence; the SMS provider from P0-07a/P0-07 | - |
+| P0-10 Vendor/BAA matrix | `baa-google-cloud.md` as the Google Cloud row: **NOT ACCEPTED**; `hipaa-controls.md` as guardrail evidence; the SMS provider from P0-07a/P0-07 | ✅ done in P0-10 (`vendors.yaml`) |
+| P0-11 Risk assessment (from P0-10) | `vendors.yaml` / `vendor-matrix.md`: vendor list with PHI flags and environments as the third-party input; gate CLOSED today | - |
+| P1-01 Monorepo (from P0-10) | Copy the checklist in `pr-vendor-check.md` into `.github/pull_request_template.md`; CODEOWNERS entries there are proposed, add the file only when the user decides (DECISIONS #308). No GitHub issue yet | - |
+| P1-06 CI/CD (from P0-10) | Run `check_vendors.py` and `pytest scripts/compliance/` on every PR; `check_vendors.py --gate` must print GATE OPEN before the first prod deploy with real PHI. No GitHub issue yet | - |
+| P5-14 HIPAA readiness (from P0-10) | `vendor-matrix.md` and the `--gate` output as evidence | - |
+| P0-05, P0-07, P0-08, P0-09 (from P0-10) | When a record turns ACCEPTED/SIGNED, set that row (or clinic) to `signed` with date and record, and re-render | - |
 | P0-13 Gemini model choice | Covered entries "Generative AI on Agent Platform" and "Gemini Enterprise Agent Platform" (Vertex AI renamed); GA models only | - |
 | P1-02 Terraform base | `foundation.yaml`: **import** the four projects, never recreate them; the state bucket once Part B is done | - |

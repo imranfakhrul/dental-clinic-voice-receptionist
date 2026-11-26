@@ -1,0 +1,91 @@
+# Vendor/BAA matrix: source of truth (P0-10). Every third party that receives, stores or can access data
+# from our system or our team's work has a row. Schema: vendors.schema.json.
+# After any change: python3 scripts/compliance/check_vendors.py --render   (rewrites vendor-matrix.md)
+# Is real PHI allowed in prod?   python3 scripts/compliance/check_vendors.py --gate
+# How to add a vendor and the review routine: README.md in this folder.
+schema_version: 1
+reviewed_on: "2026-11-26"
+reviewed_by: "Sam Comply (compliance advisor)"
+
+vendors:
+  - id: google-cloud
+    name: Google Cloud
+    services: [Vertex AI (Gemini), Speech-to-Text, Text-to-Speech, Cloud Run, Cloud SQL, Memorystore, Cloud Tasks, Secret Manager, KMS, Cloud Logging]
+    phi: "yes"
+    environments: [dev, staging, prod, ops]
+    baa: {status: pending, type: click_through, record: docs/compliance/baa-google-cloud.md}
+    product_list: infra/org/allowed_services.yaml
+    owner: "Riley Tech (tech lead)"
+    tasks: [P0-05, P0-06]
+    notes: "Record says NOT ACCEPTED (paper, DECISIONS #293). Only APIs in allowed_services.yaml may be used; real PHI only in prod (DECISIONS #25). Hosting is local-first until the client chooses (DECISIONS #302)."
+
+  - id: google-workspace
+    name: Google Workspace (Gmail)
+    services: [Admin callback emails from callbacks@]
+    phi: conditional
+    phi_condition: "Only when a clinic uses callback.email_mode = full_details (DECISIONS #41, #303); the default link_only email carries no PHI"
+    environments: [prod, team]
+    baa: {status: pending, type: click_through, record: docs/compliance/baa-google-workspace.md}
+    owner: "Workspace super admin (not named yet; no Workspace until production, DECISIONS #304)"
+    tasks: [P0-08]
+
+  - id: twilio
+    name: Twilio (Programmable SMS)
+    services: [SMS appointment confirmations and reminders, for clinics that choose SMS]
+    phi: "yes"
+    environments: [staging, prod]
+    baa: {status: pending, type: signed_contract, record: docs/compliance/baa-twilio.md}
+    owner: "Riley Tech (tech lead)"
+    tasks: [P0-07a, P0-07]
+    notes: "Record says NOT ACCEPTED; BAA needs Security or Enterprise Edition. No account yet (DECISIONS #301). Messages carry only first name, clinic, date, time (messaging_policy.yaml)."
+
+  - id: meta-whatsapp
+    name: Meta (WhatsApp Cloud API)
+    services: [WhatsApp appointment confirmations and reminders, for clinics that choose WhatsApp]
+    phi: "yes"
+    environments: [dev, staging, prod]
+    baa: {status: pending, type: signed_contract, record: docs/compliance/baa-meta-whatsapp.md}
+    owner: "Riley Tech (tech lead)"
+    tasks: [P0-07a, P0-07]
+    notes: "Record says NOT ACCEPTED; Meta's terms say it isn't a business associate. Used now for testing only, synthetic data to team test numbers (messaging_policy.yaml allowed_with_phi: false)."
+
+  - id: open-dental
+    name: Open Dental (API relay)
+    services: [Open Dental API, requests relayed to the clinic's eConnector]
+    phi: "yes"
+    environments: [dev, staging, prod]
+    baa: {status: under_review, type: clinic_arrangement, record: null}
+    owner: "Sam Comply (compliance advisor)"
+    tasks: [P0-09, P0-12]
+    notes: "Counsel decides whether the clinic's own arrangement with Open Dental covers the relay (P0-09 Annex B open question). dev and staging use the Open Dental test database only."
+
+  - id: github
+    name: GitHub
+    services: [Source code, issues, pull requests, CI]
+    phi: "no"
+    no_phi_control: "Synthetic data only in code, fixtures, issues and screenshots; PR vendor and PHI check (pr-vendor-check.md); PHI-redacting logger (P1-07); public-repo scan before each commit"
+    environments: [team]
+    baa: {status: not_required}
+    owner: "Riley Tech (tech lead)"
+    tasks: [P1-01]
+
+  - id: ai-coding-assistant
+    name: AI coding assistant (Anthropic, Claude Code)
+    services: [Reads the repository and terminal output while the team writes code and docs]
+    phi: "no"
+    no_phi_control: "Never given PHI: synthetic data only in the repo, terminal, test output and prompts; no access to prod data or the clinic's Open Dental"
+    environments: [team]
+    baa: {status: not_required}
+    owner: "Riley Tech (tech lead)"
+    tasks: [P0-10]
+    notes: "Added for spec §14 (team tools that may see PHI by accident). If it is ever used on prod data or logs, it needs a BAA first."
+
+clinics:
+  - clinic_slug: example-dental
+    baa: {status: pending, record: docs/compliance/baa-clinic-example-dental.md}
+
+phi_gate:
+  - {id: gcp_baa, description: "Google Cloud BAA accepted", task: P0-05, status: pending, evidence: docs/compliance/baa-google-cloud.md}
+  - {id: guardrails, description: "Org guardrails applied and tested", task: P0-06, status: pending, evidence: docs/compliance/hipaa-controls.md}
+  - {id: clinic_baa, description: "Clinic BAA signed (at least one clinic)", task: P0-09, status: pending, evidence: docs/compliance/baa-clinic-example-dental.md}
+  - {id: matrix, description: "Vendor matrix complete and reviewed", task: P0-10, status: done, evidence: docs/compliance/vendor-matrix.md}
