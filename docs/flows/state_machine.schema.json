@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "state_machine.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "version",
+    "initial_state",
+    "states",
+    "slots",
+    "guards",
+    "transitions",
+    "global_transitions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "initial_state": {
+      "$ref": "#/$defs/name"
+    },
+    "states": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "kind",
+          "allowed_tools",
+          "collects"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/name"
+          },
+          "kind": {
+            "enum": [
+              "main",
+              "side",
+              "terminal"
+            ]
+          },
+          "allowed_tools": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/snake"
+            }
+          },
+          "collects": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/snake"
+            }
+          },
+          "resumes": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "phi"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/snake"
+          },
+          "phi": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "guards": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/snake"
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from",
+          "event",
+          "to"
+        ],
+        "properties": {
+          "from": {
+            "$ref": "#/$defs/name"
+          },
+          "event": {
+            "$ref": "#/$defs/snake"
+          },
+          "to": {
+            "$ref": "#/$defs/name"
+          },
+          "guards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/snake"
+            }
+          },
+          "action": {
+            "$ref": "#/$defs/snake"
+          }
+        }
+      }
+    },
+    "global_transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event",
+          "to",
+          "except"
+        ],
+        "properties": {
+          "event": {
+            "$ref": "#/$defs/snake"
+          },
+          "to": {
+            "$ref": "#/$defs/name"
+          },
+          "except": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/name"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "name": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z_]*$"
+    },
+    "snake": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    }
+  }
+}

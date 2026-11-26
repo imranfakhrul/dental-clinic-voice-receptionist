@@ -17,6 +17,7 @@ It runs on Google Cloud (Gemini on Vertex AI, Speech-to-Text, Text-to-Speech, Cl
 | [dental-ai-tasks/GLOSSARY.md](dental-ai-tasks/GLOSSARY.md) | Terms (PHI, BAA, PatNum, eConnector, …) |
 | [docs/phase-0-discovery-compliance/](docs/phase-0-discovery-compliance/README.md) | Phase 0 overview: goal, all 16 tasks with issue numbers, status and order of work |
 | [docs/discovery/clinic-decision-log.md](docs/discovery/clinic-decision-log.md) | Clinic decisions from the discovery workshop (P0-01) |
+| [docs/flows/overview.md](docs/flows/overview.md) | Conversation flows: the state machine every chat and call follows, 8 flow diagrams, PHI list (P0-04) |
 
 ## Branches
 | Branch | Purpose |

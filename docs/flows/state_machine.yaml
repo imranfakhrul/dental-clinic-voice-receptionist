@@ -1,0 +1,193 @@
+# Authoritative conversation state machine (P0-04). P2-01 loads this file; if a diagram or document disagrees, this file wins.
+# Readable version: docs/flows/overview.md and the eight flow documents in docs/flows/.
+# Engine rules (P2-01): global transitions are checked first; local transitions for (from, event) are tried in file order and
+# the first whose guards all pass wins; an unregistered guard fails closed. Built-in engine events that are not table rows:
+# `resume` (side state done -> resume_state, or INTENT) and `channel_switched` (keeps state and slots).
+schema_version: 1
+version: "0.2"
+initial_state: GREETING
+
+states:
+  # ---------- main ----------
+  - {name: GREETING, kind: main, allowed_tools: [], collects: []}
+  - {name: INTENT, kind: main, allowed_tools: [], collects: [intent]}
+  - {name: IDENTIFY, kind: main, allowed_tools: [search_patient], collects: [first_name, last_name, dob, phone]}
+  - {name: VERIFY, kind: main, allowed_tools: [verify_patient], collects: [zip]}
+  - {name: REGISTER, kind: main, allowed_tools: [search_patient, create_patient], collects: [email, address, mobile_phone]}
+  - {name: APPOINTMENT_TYPE, kind: main, allowed_tools: [], collects: [reason_code, reason_text]}
+  - {name: AVAILABILITY, kind: main, allowed_tools: [get_appointment_availability], collects: [preferred_time, chosen_slot]}
+  - {name: CONSENT, kind: main, allowed_tools: [record_consent], collects: [consent_whatsapp, whatsapp_number]}
+  - {name: CONFIRM, kind: main, allowed_tools: [], collects: [confirmation]}
+  - {name: BOOK, kind: main, allowed_tools: [book_appointment, reschedule_appointment, cancel_appointment], collects: [apt_num]}
+  - {name: WRAP_UP, kind: main, allowed_tools: [], collects: []}
+  # ---------- side ----------
+  - {name: CHECK_APPOINTMENT, kind: side, allowed_tools: [get_patient_appointments], collects: []}
+  - {name: RESCHEDULE, kind: side, allowed_tools: [get_patient_appointments], collects: [apt_num, reason_code]}
+  - {name: CANCEL, kind: side, allowed_tools: [get_patient_appointments], collects: [apt_num]}
+  - {name: FAQ, kind: side, allowed_tools: [get_clinic_information, get_provider_information], collects: [], resumes: true}
+  - {name: EMERGENCY, kind: side, allowed_tools: [create_callback_request, get_appointment_availability], collects: [situation, chosen_slot, first_name, phone]}
+  - {name: CALLBACK_REQUEST, kind: side, allowed_tools: [create_callback_request], collects: [situation, callback_time, first_name, last_name, phone]}
+  # ---------- terminal ----------
+  - {name: END, kind: terminal, allowed_tools: [], collects: []}
+
+slots:
+  # context values (not PHI)
+  - {name: intent, phi: false}
+  - {name: operation, phi: false}
+  - {name: urgent, phi: false}
+  - {name: resume_state, phi: false}
+  - {name: active_person, phi: false}
+  # identity and contact (PHI)
+  - {name: first_name, phi: true}
+  - {name: last_name, phi: true}
+  - {name: dob, phi: true}
+  - {name: phone, phi: true}
+  - {name: zip, phi: true}
+  - {name: email, phi: true}
+  - {name: address, phi: true}
+  - {name: mobile_phone, phi: true}
+  # visit
+  - {name: reason_code, phi: false}
+  - {name: reason_text, phi: true}
+  - {name: preferred_time, phi: false}
+  - {name: chosen_slot, phi: false}
+  - {name: confirmation, phi: false}
+  - {name: apt_num, phi: false}
+  # consent
+  - {name: consent_whatsapp, phi: false}
+  - {name: whatsapp_number, phi: true}
+  # emergency and callback
+  - {name: situation, phi: true}
+  - {name: callback_time, phi: false}
+
+guards:
+  # spec §6
+  - verified
+  - fresh_availability
+  - confirmation_recorded
+  - outside_cancellation_window
+  - bookable
+  - consent_unknown
+  # added for determinism (overview.md "Guards")
+  - urgent
+  - intent_book
+  - intent_reschedule
+  - intent_cancel
+  - intent_check_appointment
+  - operation_cancel
+  - target_slot
+  - target_reason
+  - target_whatsapp
+
+transitions:
+  # ---------- start ----------
+  - {from: GREETING, event: greeted, to: INTENT}
+
+  # ---------- INTENT routing (side states need `verified`; otherwise identify first, intent kept) ----------
+  - {from: INTENT, event: intent_book, guards: [verified], to: APPOINTMENT_TYPE}
+  - {from: INTENT, event: intent_book, to: IDENTIFY}
+  - {from: INTENT, event: intent_reschedule, guards: [verified], to: RESCHEDULE}
+  - {from: INTENT, event: intent_reschedule, to: IDENTIFY}
+  - {from: INTENT, event: intent_cancel, guards: [verified], to: CANCEL}
+  - {from: INTENT, event: intent_cancel, to: IDENTIFY}
+  - {from: INTENT, event: intent_check_appointment, guards: [verified], to: CHECK_APPOINTMENT}
+  - {from: INTENT, event: intent_check_appointment, to: IDENTIFY}
+
+  # ---------- Flow 1: book, existing patient ----------
+  - {from: IDENTIFY, event: match_strong, to: VERIFY}
+  - {from: IDENTIFY, event: match_partial, to: IDENTIFY, action: ask_additional_identifier}
+  - {from: IDENTIFY, event: match_none, to: IDENTIFY, action: confirm_spelling_and_dob}
+  - {from: IDENTIFY, event: match_multiple_unresolved, to: CALLBACK_REQUEST}
+  - {from: VERIFY, event: verify_failed, to: VERIFY, action: ask_identifier_again}
+  - {from: VERIFY, event: verify_attempt_limit, to: CALLBACK_REQUEST}
+  # after `verified`, continue the kept intent (Tier 2 urgent path first: the urgent slot is already chosen)
+  - {from: VERIFY, event: verified, guards: [verified, urgent, consent_unknown], to: CONSENT}
+  - {from: VERIFY, event: verified, guards: [verified, urgent], to: CONFIRM}
+  - {from: VERIFY, event: verified, guards: [verified, intent_book], to: APPOINTMENT_TYPE}
+  - {from: VERIFY, event: verified, guards: [verified, intent_reschedule], to: RESCHEDULE}
+  - {from: VERIFY, event: verified, guards: [verified, intent_cancel], to: CANCEL}
+  - {from: VERIFY, event: verified, guards: [verified, intent_check_appointment], to: CHECK_APPOINTMENT}
+  - {from: VERIFY, event: verified, to: INTENT}
+  - {from: APPOINTMENT_TYPE, event: reason_classified, guards: [bookable], to: AVAILABILITY}
+  - {from: APPOINTMENT_TYPE, event: not_bookable, to: CALLBACK_REQUEST}
+  - {from: APPOINTMENT_TYPE, event: not_offered, to: WRAP_UP, action: explain_not_offered}
+  - {from: AVAILABILITY, event: want_later, to: AVAILABILITY, action: offer_later_times}
+  - {from: AVAILABILITY, event: slot_chosen, guards: [consent_unknown], to: CONSENT}
+  - {from: AVAILABILITY, event: slot_chosen, to: CONFIRM}
+  - {from: AVAILABILITY, event: no_suitable_slot, to: CALLBACK_REQUEST}
+  - {from: CONSENT, event: consent_done, to: CONFIRM}
+  # cancel commits without fresh_availability; book and reschedule need it
+  - {from: CONFIRM, event: confirmed, guards: [operation_cancel, verified, confirmation_recorded, outside_cancellation_window], to: BOOK}
+  - {from: CONFIRM, event: confirmed, guards: [verified, fresh_availability, confirmation_recorded], to: BOOK}
+  - {from: CONFIRM, event: declined, guards: [operation_cancel], to: WRAP_UP}
+  - {from: CONFIRM, event: declined, to: AVAILABILITY}
+  # change on the card (#174): clear the field, return to the state that collects it
+  - {from: CONFIRM, event: change_requested, guards: [operation_cancel, verified], to: CANCEL}
+  - {from: CONFIRM, event: change_requested, guards: [target_whatsapp], to: CONSENT}
+  - {from: CONFIRM, event: change_requested, guards: [target_reason], to: APPOINTMENT_TYPE}
+  - {from: CONFIRM, event: change_requested, guards: [target_slot], to: AVAILABILITY}
+  - {from: CONFIRM, event: change_requested, to: AVAILABILITY}
+  - {from: BOOK, event: committed, to: WRAP_UP}
+  - {from: BOOK, event: commit_conflict, to: AVAILABILITY, action: apologize_and_refetch}
+  # review T1: outcome unknown (timeout, in_progress) -> staff confirm (P2-16 booking_needs_confirmation, P2-18 change_needs_confirmation)
+  - {from: BOOK, event: commit_unknown, to: CALLBACK_REQUEST}
+  - {from: WRAP_UP, event: more_help, to: INTENT}
+  - {from: WRAP_UP, event: done, to: END}
+
+  # ---------- Flow 2: book, new patient ----------
+  - {from: IDENTIFY, event: match_none_confirmed, guards: [urgent], to: REGISTER}
+  - {from: IDENTIFY, event: match_none_confirmed, guards: [intent_book], to: REGISTER}
+  - {from: IDENTIFY, event: match_none_confirmed, to: CALLBACK_REQUEST}
+  - {from: REGISTER, event: change_requested, to: REGISTER, action: recollect_field}
+  - {from: REGISTER, event: registered, guards: [verified, urgent, consent_unknown], to: CONSENT}
+  - {from: REGISTER, event: registered, guards: [verified, urgent], to: CONFIRM}
+  - {from: REGISTER, event: registered, guards: [verified], to: APPOINTMENT_TYPE}
+  - {from: REGISTER, event: create_refused, to: CALLBACK_REQUEST}
+
+  # ---------- Flow 3: reschedule ----------
+  - {from: RESCHEDULE, event: reschedule_ready, guards: [verified, outside_cancellation_window], to: AVAILABILITY}
+  - {from: RESCHEDULE, event: callback_requested, to: CALLBACK_REQUEST}
+  - {from: RESCHEDULE, event: anything_else, to: WRAP_UP}
+  - {from: RESCHEDULE, event: no_appointments, to: WRAP_UP}
+
+  # ---------- Flow 4: cancel ----------
+  - {from: CANCEL, event: cancel_ready, guards: [verified, outside_cancellation_window], to: CONFIRM}
+  - {from: CANCEL, event: callback_requested, to: CALLBACK_REQUEST}
+  - {from: CANCEL, event: anything_else, to: WRAP_UP}
+  - {from: CANCEL, event: no_appointments, to: WRAP_UP}
+
+  # ---------- Flow 5: check appointment ----------
+  - {from: CHECK_APPOINTMENT, event: appointments_listed, to: WRAP_UP}
+  - {from: CHECK_APPOINTMENT, event: no_appointments, to: WRAP_UP}
+
+  # ---------- Flow 6: FAQ (answer, then built-in `resume`) ----------
+  - {from: FAQ, event: callback_requested, to: CALLBACK_REQUEST}
+
+  # ---------- Flow 7: emergency ----------
+  # Tier 1 / crisis: script, URGENT case, repeat the script on any input until the patient leaves (never resumes)
+  - {from: EMERGENCY, event: session_done, to: END}
+  # uncertain: URGENT case, then built-in `resume`. Tier 2: offer the earliest urgent slots here (P2-20)
+  - {from: EMERGENCY, event: slot_chosen, guards: [verified, consent_unknown], to: CONSENT}
+  - {from: EMERGENCY, event: slot_chosen, guards: [verified], to: CONFIRM}
+  - {from: EMERGENCY, event: slot_chosen, to: IDENTIFY}
+  - {from: EMERGENCY, event: urgent_case_created, to: WRAP_UP}
+
+  # ---------- Flow 8: callback ----------
+  - {from: CALLBACK_REQUEST, event: change_requested, to: CALLBACK_REQUEST, action: recollect_field}
+  - {from: CALLBACK_REQUEST, event: callback_created, to: WRAP_UP}
+  # review S2: the patient doesn't want a callback after all ("never mind")
+  - {from: CALLBACK_REQUEST, event: callback_declined, to: WRAP_UP}
+
+global_transitions:
+  - {event: emergency_tier1, to: EMERGENCY, except: [END]}
+  - {event: emergency_crisis, to: EMERGENCY, except: [END]}
+  - {event: emergency_uncertain, to: EMERGENCY, except: [EMERGENCY, END]}
+  - {event: emergency_tier2, to: EMERGENCY, except: [EMERGENCY, END]}
+  - {event: human_requested, to: CALLBACK_REQUEST, except: [CALLBACK_REQUEST, EMERGENCY, END]}
+  - {event: not_understood_limit, to: CALLBACK_REQUEST, except: [CALLBACK_REQUEST, EMERGENCY, END]}
+  - {event: od_unavailable, to: CALLBACK_REQUEST, except: [CALLBACK_REQUEST, EMERGENCY, END]}
+  - {event: intent_changed, to: INTENT, except: [EMERGENCY, CALLBACK_REQUEST, BOOK, END]}
+  - {event: faq_asked, to: FAQ, except: [FAQ, EMERGENCY, BOOK, END]}
+  - {event: idle_timeout, to: END, except: [END]}
+  - {event: add_patient, to: IDENTIFY, except: [EMERGENCY, CALLBACK_REQUEST, BOOK, END]}
+  - {event: switch_patient, to: INTENT, except: [EMERGENCY, BOOK, END]}

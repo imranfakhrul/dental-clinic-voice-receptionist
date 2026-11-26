@@ -1,0 +1,23 @@
+# Golden conversation (P0-04). Synthetic data only. Asserts states, slots and tool calls, never wording.
+flow: check-appointment
+version: '0.1'
+synthetic: true
+notes: Nothing is revealed before VERIFY succeeds.
+start_state: GREETING
+turns:
+- user: When is my next appointment?
+  expect_state: IDENTIFY
+  expect_slots:
+    intent: check_appointment
+- user: Jane Test, March 14 1985
+  expect_state: VERIFY
+  expect_tools:
+  - search_patient
+- user: ZIP 97201
+  expect_state: WRAP_UP
+  expect_tools:
+  - verify_patient
+  - get_patient_appointments
+- user: That's all, thanks
+  expect_state: END
+end_state: END

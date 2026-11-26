@@ -1,0 +1,54 @@
+# Golden conversation (P0-04). Synthetic data only. Asserts states, slots and tool calls, never wording.
+flow: book-new-patient
+version: '0.1'
+synthetic: true
+notes: No match, spelling confirmed, registration card, create, then book a new-patient exam.
+start_state: GREETING
+turns:
+- user: Hi, I'd like to book my first visit
+  expect_state: IDENTIFY
+  expect_slots:
+    intent: book
+- user: Sam Test, born June 2 1990, my number is 503 555 0101
+  expect_state: IDENTIFY
+  expect_slots:
+    first_name: Sam
+    last_name: Test
+    dob: '1990-06-02'
+    phone: '+15035550101'
+  expect_tools:
+  - search_patient
+- user: Yes, S-A-M T-E-S-T, June 2nd 1990
+  expect_state: REGISTER
+  expect_tools:
+  - search_patient
+- user: sam.test@example.com, 100 Test Street, Portland OR 97201, same mobile number
+  expect_state: REGISTER
+  expect_slots:
+    email: sam.test@example.com
+    mobile_phone: '+15035550101'
+- user: Yes, everything is right
+  expect_state: APPOINTMENT_TYPE
+  expect_tools:
+  - create_patient
+- user: A check-up as a new patient
+  expect_state: AVAILABILITY
+  expect_slots:
+    reason_code: new_patient_exam
+  expect_tools:
+  - get_appointment_availability
+- user: Tuesday at 8 works
+  expect_state: CONSENT
+  expect_slots:
+    chosen_slot: opt:1
+- user: No thanks
+  expect_state: CONFIRM
+  expect_slots:
+    consent_whatsapp: false
+- user: 'Yes'
+  expect_state: WRAP_UP
+  expect_tools:
+  - book_appointment
+- user: That's all
+  expect_state: END
+end_state: END

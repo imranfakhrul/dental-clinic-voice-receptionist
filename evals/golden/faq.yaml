@@ -1,0 +1,40 @@
+# Golden conversation (P0-04). Synthetic data only. Asserts states, slots and tool calls, never wording.
+flow: faq
+version: '0.1'
+synthetic: true
+notes: Questions mid-booking return to AVAILABILITY; a coverage question becomes a callback (P0-01 Q6).
+start_state: GREETING
+turns:
+- user: I'd like to book a cleaning. I'm Jane Test, born March 14 1985
+  expect_state: VERIFY
+  expect_slots:
+    intent: book
+    reason_code: recall_cleaning
+  expect_tools:
+  - search_patient
+- user: '97201'
+  expect_state: AVAILABILITY
+  expect_tools:
+  - verify_patient
+  - get_appointment_availability
+- user: Wait, what's your address?
+  expect_state: AVAILABILITY
+  expect_tools:
+  - get_clinic_information
+- user: And do you take Delta Dental?
+  expect_state: AVAILABILITY
+  expect_tools:
+  - get_clinic_information
+- user: Is a crown covered by my plan?
+  expect_state: FAQ
+- user: Yes, please have someone call me
+  expect_state: CALLBACK_REQUEST
+- user: Yes, Jane Test, 503 555 0100 is right, mornings are best
+  expect_state: WRAP_UP
+  expect_slots:
+    callback_time: mornings
+  expect_tools:
+  - create_callback_request
+- user: No, thanks
+  expect_state: END
+end_state: END

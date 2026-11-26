@@ -1,0 +1,23 @@
+# Golden conversation (P0-04). Synthetic data only. Asserts states, slots and tool calls, never wording.
+flow: callback
+version: '0.1'
+synthetic: true
+notes: The patient asks for a person; details read back on a card; case created once.
+start_state: GREETING
+turns:
+- user: Can I talk to a person please?
+  expect_state: CALLBACK_REQUEST
+- user: Jane Test, 503 555 0100, it's about my bill, afternoons are best
+  expect_state: CALLBACK_REQUEST
+  expect_slots:
+    first_name: Jane
+    last_name: Test
+    phone: '+15035550100'
+    callback_time: afternoons
+- user: Yes, that's right
+  expect_state: WRAP_UP
+  expect_tools:
+  - create_callback_request
+- user: That's all
+  expect_state: END
+end_state: END

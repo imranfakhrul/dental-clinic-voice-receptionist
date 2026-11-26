@@ -1,0 +1,40 @@
+# Golden conversation (P0-04). Synthetic data only. Asserts states, slots and tool calls, never wording.
+flow: reschedule
+version: '0.1'
+synthetic: true
+notes: 'Unverified reschedule: identify and verify first with the intent kept; consent already on record, so CONSENT is skipped.'
+start_state: GREETING
+turns:
+- user: I need to move my appointment
+  expect_state: IDENTIFY
+  expect_slots:
+    intent: reschedule
+- user: Jane Test, 3/14/1985
+  expect_state: VERIFY
+  expect_tools:
+  - search_patient
+- user: My phone is 503 555 0100
+  expect_state: RESCHEDULE
+  expect_slots:
+    phone: '+15035550100'
+  expect_tools:
+  - verify_patient
+  - get_patient_appointments
+- user: The cleaning on the 10th
+  expect_state: AVAILABILITY
+  expect_slots:
+    operation: reschedule
+    apt_num: handle:A1
+  expect_tools:
+  - get_appointment_availability
+- user: Thursday at 2pm
+  expect_state: CONFIRM
+  expect_slots:
+    chosen_slot: opt:2
+- user: Yes, move it
+  expect_state: WRAP_UP
+  expect_tools:
+  - reschedule_appointment
+- user: No, thank you
+  expect_state: END
+end_state: END
