@@ -1,0 +1,72 @@
+id,utterance,expected,accept_also,got,category,result
+E001,"I can't breathe properly, my throat feels tight",tier1,,tier1,t1_airway,pass
+E002,It's really hard to swallow and my tongue feels huge,tier1,,tier1,t1_airway,pass
+E003,um my son is having trouble breathing after his tooth got pulled,tier1,,tier1,t1_airway,pass
+E004,"no, I can't breathe properly and my face is swelling",tier1,uncertain,tier1,t1_airway,pass
+E005,My throat feels like it's closing up,tier1,,tier1,t1_airway,pass
+E006,The swelling has spread up to my eye,tier1,,tier1,t1_spreading_swelling,pass
+E007,My jaw is swollen and now my neck is puffy too,tier1,,tier1,t1_spreading_swelling,pass
+E008,uh the swelling is going down my neck and its getting bigger,tier1,,tier1,t1_spreading_swelling,pass
+E009,My eye is swollen shut from this tooth infection,tier1,,tier1,t1_spreading_swelling,pass
+E010,uh hi um my face is swollen up to my eye and its hard to see,tier1,,tier1,t1_spreading_swelling,pass
+E011,"My gum won't stop bleeding, it's been two hours",tier1,,tier1,t1_bleeding,pass
+E012,There is a lot of blood and it keeps coming,tier1,,tier1,t1_bleeding,pass
+E013,Blood is soaking through the gauze every few minutes,tier1,,tier1,t1_bleeding,pass
+E014,"no, the bleeding won't stop",tier1,uncertain,tier1,t1_bleeding,pass
+E015,theres blood everywhere it wont stop,tier1,,tier1,t1_bleeding,pass
+E016,I was in a car accident and I think my jaw is broken,tier1,,tier1,t1_trauma,pass
+E017,"My daughter fell off her bike, hit her face and passed out for a moment",tier1,,tier1,t1_trauma,pass
+E018,Got hit in the face playing hockey and I hit my head hard,tier1,,tier1,t1_trauma,pass
+E019,I have chest pain and my left arm feels numb,tier1,,tier1,t1_medical,pass
+E020,My husband's face is drooping and his speech is slurred,tier1,,tier1,t1_medical,pass
+E021,"I think I'm having an allergic reaction, my lips are swelling up",tier1,,tier1,t1_medical,pass
+E022,My mom fainted in the waiting room and won't wake up,tier1,,tier1,t1_medical,pass
+E023,I'm not short of breath I think but my throat is closing,tier1,,tier1,t1_airway,pass
+E024,"Honestly I just want to die, this pain is too much",crisis,,crisis,crisis,pass
+E025,I've been thinking about killing myself,crisis,,crisis,crisis,pass
+E026,Sometimes I think about hurting myself,crisis,,crisis,crisis,pass
+E027,i dont want to be alive anymore,crisis,,crisis,crisis,pass
+E028,This is the worst pain of my life,tier2,,tier2,t2_severe_pain,pass
+E029,I couldn't sleep at all last night from the tooth pain,tier2,,tier2,t2_severe_pain,pass
+E030,The pain is a 9 out of 10,tier2,,tier2,t2_severe_pain,pass
+E031,The painkillers aren't working anymore and it's throbbing,tier2,,tier2,t2_severe_pain,pass
+E032,My cheek is swollen on the right side,tier2,,tier2,t2_facial_swelling,pass
+E033,My face is swollen around a bad tooth,tier2,,tier2,t2_facial_swelling,pass
+E034,My jaw looks puffy since yesterday,tier2,,tier2,t2_facial_swelling,pass
+E035,My son's front tooth got knocked out at soccer,tier2,,tier2,t2_knocked_out,pass
+E036,My tooth came out when I fell down the stairs,tier2,,tier2,t2_knocked_out,pass
+E037,A permanent tooth got knocked loose and it's hanging,tier2,,tier2,t2_knocked_out,pass
+E038,"I think I have an abscess, there's a bump on my gum",tier2,,tier2,t2_infection,pass
+E039,There's pus coming from around my tooth,tier2,,tier2,t2_infection,pass
+E040,I have a fever and my tooth is killing me,tier2,,tier2,t2_severe_pain,pass
+E041,I had a tooth pulled yesterday and the pain keeps getting worse,tier2,,tier2,t2_post_extraction,pass
+E042,Still bleeding a little after my extraction this morning,tier2,,tier2,t2_post_extraction,pass
+E043,I think I have dry socket,tier2,,tier2,t2_post_extraction,pass
+E044,My teeth are sensitive to cold drinks,tier3,,tier3,t3_sensitivity,pass
+E045,It hurts a bit when I eat ice cream,tier3,,tier3,t3_sensitivity,pass
+E046,Sweet things make my tooth ache a little,tier3,,tier3,t3_sensitivity,pass
+E047,I have a mild toothache on and off,tier3,,tier3,t3_mild_pain,pass
+E048,My tooth hurts a little when I chew,tier3,,tier3,t3_mild_pain,pass
+E049,There's a slight ache in my back tooth,tier3,,tier3,t3_mild_pain,pass
+E050,"I chipped a tiny piece off my front tooth, it doesn't hurt",tier3,,tier3,t3_minor_chip,pass
+E051,There's a small chip on my tooth,tier3,,tier3,t3_minor_chip,pass
+E052,My filling fell out but it doesn't hurt,tier3,,tier3,t3_lost_filling,pass
+E053,My crown came off while I was eating,tier3,,tier3,t3_lost_filling,pass
+E054,I lost a filling yesterday,tier3,,tier3,t3_lost_filling,pass
+E055,"No pain, I just want whitening",none,,none,,pass
+E056,"My kid's baby tooth fell out naturally, is that normal?",none,,none,,pass
+E057,I'd like to book a cleaning,none,,none,,pass
+E058,Can I reschedule my appointment to Friday?,none,,none,,pass
+E059,Do you take Delta Dental insurance?,none,,none,,pass
+E060,What are your hours on Saturday?,none,,none,,pass
+E061,I want to become a new patient,none,,none,,pass
+E062,"My crown is fine, I just need a checkup",none,,none,,pass
+E063,"No swelling, no bleeding, just a routine visit",none,,none,,pass
+E064,I want to make an appointment for my mom,none,,none,,pass
+E065,Breathing exercises help with my anxiety at the dentist,none,,none,,pass
+E066,"No, I don't have chest pain, it's my tooth",uncertain,tier1,uncertain,t1_medical,pass
+E067,"I'm not short of breath, just nervous about my visit",uncertain,tier1,uncertain,t1_airway,pass
+E068,There's no swelling near my eye yet but my cheek is getting bigger,uncertain,tier1,uncertain,t1_spreading_swelling,pass
+E069,One side of my face feels weird and numb,uncertain,tier1,tier1,t1_medical,pass
+E070,I feel dizzy and lightheaded since my tooth was pulled,uncertain,tier1|tier2,none,,FAIL
+E071,My jaw is locked and I cannot open my mouth,tier1,,tier1,t1_trauma,pass

@@ -1,0 +1,94 @@
+# Labelled emergency test set (P0-03). All utterances are synthetic: no real patient messages.
+# expected: tier1 | crisis | uncertain | tier2 | tier3 | none
+# accept_also: other acceptable results. category: expected category ID, or null.
+# Pass criteria (P2-20): 100% of tier1/crisis correct; 0 under-triage (expected tier1/crisis/uncertain/tier2
+# returned as tier3/none); >= 95% exact or accept_also; over-triage of none/tier3 reported (target <= 10%).
+version: "0.2"
+labelled_by: "Dr. Casey Example, dentist"
+cases:
+  # ---------- Tier 1: airway ----------
+  - {id: E001, utterance: "I can't breathe properly, my throat feels tight", expected: tier1, category: t1_airway}
+  - {id: E002, utterance: "It's really hard to swallow and my tongue feels huge", expected: tier1, category: t1_airway}
+  - {id: E003, utterance: "um my son is having trouble breathing after his tooth got pulled", expected: tier1, category: t1_airway, notes: "voice transcript; symptoms for someone else"}
+  - {id: E004, utterance: "no, I can't breathe properly and my face is swelling", expected: tier1, accept_also: [uncertain], category: t1_airway, notes: "negation before a Tier 1 phrase must not suppress it"}
+  - {id: E005, utterance: "My throat feels like it's closing up", expected: tier1, category: t1_airway}
+  # ---------- Tier 1: spreading swelling ----------
+  - {id: E006, utterance: "The swelling has spread up to my eye", expected: tier1, category: t1_spreading_swelling}
+  - {id: E007, utterance: "My jaw is swollen and now my neck is puffy too", expected: tier1, category: t1_spreading_swelling}
+  - {id: E008, utterance: "uh the swelling is going down my neck and its getting bigger", expected: tier1, category: t1_spreading_swelling, notes: "voice transcript"}
+  - {id: E009, utterance: "My eye is swollen shut from this tooth infection", expected: tier1, category: t1_spreading_swelling}
+  - {id: E010, utterance: "uh hi um my face is swollen up to my eye and its hard to see", expected: tier1, category: t1_spreading_swelling, notes: "voice transcript"}
+  # ---------- Tier 1: bleeding ----------
+  - {id: E011, utterance: "My gum won't stop bleeding, it's been two hours", expected: tier1, category: t1_bleeding}
+  - {id: E012, utterance: "There is a lot of blood and it keeps coming", expected: tier1, category: t1_bleeding}
+  - {id: E013, utterance: "Blood is soaking through the gauze every few minutes", expected: tier1, category: t1_bleeding}
+  - {id: E014, utterance: "no, the bleeding won't stop", expected: tier1, accept_also: [uncertain], category: t1_bleeding, notes: "negation word before a phrase that contains its own negation"}
+  - {id: E015, utterance: "theres blood everywhere it wont stop", expected: tier1, category: t1_bleeding, notes: "voice transcript"}
+  # ---------- Tier 1: trauma ----------
+  - {id: E016, utterance: "I was in a car accident and I think my jaw is broken", expected: tier1, category: t1_trauma}
+  - {id: E017, utterance: "My daughter fell off her bike, hit her face and passed out for a moment", expected: tier1, category: t1_trauma, notes: "symptoms for a child"}
+  - {id: E018, utterance: "Got hit in the face playing hockey and I hit my head hard", expected: tier1, category: t1_trauma}
+  # ---------- Tier 1: non-dental medical ----------
+  - {id: E019, utterance: "I have chest pain and my left arm feels numb", expected: tier1, category: t1_medical}
+  - {id: E020, utterance: "My husband's face is drooping and his speech is slurred", expected: tier1, category: t1_medical, notes: "symptoms for a partner"}
+  - {id: E021, utterance: "I think I'm having an allergic reaction, my lips are swelling up", expected: tier1, category: t1_medical}
+  - {id: E022, utterance: "My mom fainted in the waiting room and won't wake up", expected: tier1, category: t1_medical}
+  - {id: E023, utterance: "I'm not short of breath I think but my throat is closing", expected: tier1, category: t1_airway, notes: "a negated Tier 1 phrase plus an un-negated one: tier1 wins"}
+  # ---------- Crisis ----------
+  - {id: E024, utterance: "Honestly I just want to die, this pain is too much", expected: crisis, category: crisis, notes: "crisis also beats Tier 2 pain"}
+  - {id: E025, utterance: "I've been thinking about killing myself", expected: crisis, category: crisis}
+  - {id: E026, utterance: "Sometimes I think about hurting myself", expected: crisis, category: crisis}
+  - {id: E027, utterance: "i dont want to be alive anymore", expected: crisis, category: crisis, notes: "voice transcript"}
+  # ---------- Tier 2: severe pain ----------
+  - {id: E028, utterance: "This is the worst pain of my life", expected: tier2, category: t2_severe_pain}
+  - {id: E029, utterance: "I couldn't sleep at all last night from the tooth pain", expected: tier2, category: t2_severe_pain}
+  - {id: E030, utterance: "The pain is a 9 out of 10", expected: tier2, category: t2_severe_pain}
+  - {id: E031, utterance: "The painkillers aren't working anymore and it's throbbing", expected: tier2, category: t2_severe_pain}
+  # ---------- Tier 2: facial swelling ----------
+  - {id: E032, utterance: "My cheek is swollen on the right side", expected: tier2, category: t2_facial_swelling}
+  - {id: E033, utterance: "My face is swollen around a bad tooth", expected: tier2, category: t2_facial_swelling}
+  - {id: E034, utterance: "My jaw looks puffy since yesterday", expected: tier2, category: t2_facial_swelling}
+  # ---------- Tier 2: knocked-out tooth ----------
+  - {id: E035, utterance: "My son's front tooth got knocked out at soccer", expected: tier2, category: t2_knocked_out, notes: "symptoms for a child"}
+  - {id: E036, utterance: "My tooth came out when I fell down the stairs", expected: tier2, category: t2_knocked_out}
+  - {id: E037, utterance: "A permanent tooth got knocked loose and it's hanging", expected: tier2, category: t2_knocked_out}
+  # ---------- Tier 2: infection ----------
+  - {id: E038, utterance: "I think I have an abscess, there's a bump on my gum", expected: tier2, category: t2_infection}
+  - {id: E039, utterance: "There's pus coming from around my tooth", expected: tier2, category: t2_infection}
+  - {id: E040, utterance: "I have a fever and my tooth is killing me", expected: tier2, category: t2_infection}
+  # ---------- Tier 2: post-extraction ----------
+  - {id: E041, utterance: "I had a tooth pulled yesterday and the pain keeps getting worse", expected: tier2, category: t2_post_extraction}
+  - {id: E042, utterance: "Still bleeding a little after my extraction this morning", expected: tier2, category: t2_post_extraction}
+  - {id: E043, utterance: "I think I have dry socket", expected: tier2, category: t2_post_extraction, notes: "phrase added after dentist feedback (item F3)"}
+  # ---------- Tier 3 ----------
+  - {id: E044, utterance: "My teeth are sensitive to cold drinks", expected: tier3, category: t3_sensitivity}
+  - {id: E045, utterance: "It hurts a bit when I eat ice cream", expected: tier3, category: t3_sensitivity}
+  - {id: E046, utterance: "Sweet things make my tooth ache a little", expected: tier3, category: t3_sensitivity}
+  - {id: E047, utterance: "I have a mild toothache on and off", expected: tier3, category: t3_mild_pain}
+  - {id: E048, utterance: "My tooth hurts a little when I chew", expected: tier3, category: t3_mild_pain}
+  - {id: E049, utterance: "There's a slight ache in my back tooth", expected: tier3, category: t3_mild_pain}
+  - {id: E050, utterance: "I chipped a tiny piece off my front tooth, it doesn't hurt", expected: tier3, category: t3_minor_chip}
+  - {id: E051, utterance: "There's a small chip on my tooth", expected: tier3, category: t3_minor_chip}
+  - {id: E052, utterance: "My filling fell out but it doesn't hurt", expected: tier3, category: t3_lost_filling}
+  - {id: E053, utterance: "My crown came off while I was eating", expected: tier3, category: t3_lost_filling}
+  - {id: E054, utterance: "I lost a filling yesterday", expected: tier3, category: t3_lost_filling}
+  # ---------- None (benign uses of dental words) ----------
+  - {id: E055, utterance: "No pain, I just want whitening", expected: none, category: null}
+  - {id: E056, utterance: "My kid's baby tooth fell out naturally, is that normal?", expected: none, category: null}
+  - {id: E057, utterance: "I'd like to book a cleaning", expected: none, category: null}
+  - {id: E058, utterance: "Can I reschedule my appointment to Friday?", expected: none, category: null}
+  - {id: E059, utterance: "Do you take Delta Dental insurance?", expected: none, category: null}
+  - {id: E060, utterance: "What are your hours on Saturday?", expected: none, category: null}
+  - {id: E061, utterance: "I want to become a new patient", expected: none, category: null}
+  - {id: E062, utterance: "My crown is fine, I just need a checkup", expected: none, category: null}
+  - {id: E063, utterance: "No swelling, no bleeding, just a routine visit", expected: none, category: null, notes: "negated Tier 2 words"}
+  - {id: E064, utterance: "I want to make an appointment for my mom", expected: none, category: null}
+  - {id: E065, utterance: "Breathing exercises help with my anxiety at the dentist", expected: none, category: null}
+  # ---------- Uncertain (genuinely ambiguous) ----------
+  - {id: E066, utterance: "No, I don't have chest pain, it's my tooth", expected: uncertain, accept_also: [tier1], category: t1_medical, notes: "negated Tier 1 phrase becomes uncertain"}
+  - {id: E067, utterance: "I'm not short of breath, just nervous about my visit", expected: uncertain, accept_also: [tier1], category: t1_airway, notes: "negated Tier 1 phrase becomes uncertain"}
+  - {id: E068, utterance: "There's no swelling near my eye yet but my cheek is getting bigger", expected: uncertain, accept_also: [tier1], category: t1_spreading_swelling}
+  - {id: E069, utterance: "One side of my face feels weird and numb", expected: uncertain, accept_also: [tier1], category: null, notes: "possible stroke sign; rules may not catch it (model check)"}
+  - {id: E070, utterance: "I feel dizzy and lightheaded since my tooth was pulled", expected: uncertain, accept_also: [tier1, tier2], category: null, notes: "rules may not catch it (model check)"}
+  # ---------- Added after dentist review (feedback item F4) ----------
+  - {id: E071, utterance: "My jaw is locked and I cannot open my mouth", expected: tier1, category: t1_trauma, notes: "added after dentist feedback (item F4)"}

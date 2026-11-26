@@ -1,5 +1,5 @@
 # Clinic decision log: Example Dental Clinic
-- Version: 1.0
+- Version: 1.1 (Q4a-r2 added 2026-11-26)
 - Workshop date: 2026-11-25   (format: remote)
 - Attendees:
   - Alex Sample, office manager, Example Dental Clinic
@@ -12,6 +12,7 @@
 - Dentist/owner (clinical and emergency questions): Dr. Casey Example
 - BAA signatory: Dr. Casey Example, owner
 - Approved by SME: Alex Sample on 2026-11-25, see [signoff-2026-11-25.pdf](signoff-2026-11-25.pdf)
+- Version 1.1 approved by SME: Alex Sample on 2026-11-26 (Q4a-r2), recorded in [emergency-protocol-feedback-2026-11-26.md](emergency-protocol-feedback-2026-11-26.md)
 
 > *Sample values: replace them with the real workshop answers. Keep the IDs and format unchanged.*
 
@@ -66,7 +67,7 @@ Never edit an approved row in place. Add a row here with the same ID and a suffi
 
 | ID | Question | Answer | Status | Decided by | Date | Feeds tasks | Notes |
 |---|---|---|---|---|---|---|---|
-| - | - | No revisions yet | - | - | - | - | - |
+| Q4a-r2 | Approved emergency protocol, and its owner at the clinic? | Unchanged except: Tier 2 → urgent slot **within 24 hours** (not only "today"), else URGENT callback. Owner: Dr. Casey Example. Full protocol: [emergency-protocol.md](emergency-protocol.md). | Answered | Dr. Casey Example, dentist/owner | 2026-11-26 | P0-03, P2-20, P2-21, P5-15 | Clarifies "today" so evening requests get a next-morning slot; differs from default wording; DECISIONS #291 |
 
 ## Pending notifications
 Answers for tasks whose GitHub issues don't exist yet. Post each one as a comment when that phase's issues are created. Surviving tasks come from `dental-ai-tasks/tasks/_CONSOLIDATION.md`. Phase 0 tasks (P0-02, P0-03, P0-07a, P0-07, P0-08, P0-12) are notified directly on their issues.

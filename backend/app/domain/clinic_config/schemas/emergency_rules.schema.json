@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "emergency_rules.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "clinic_slug",
+    "rules_version",
+    "status",
+    "matching",
+    "urgent_slot_max_hours",
+    "categories",
+    "tier_actions",
+    "scripts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "clinic_slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "rules_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "clinic_reviewed",
+        "approved"
+      ]
+    },
+    "reviewed_by": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "reviewed_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "matching": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "negation_words",
+        "negation_window_words"
+      ],
+      "properties": {
+        "negation_words": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "negation_window_words": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6
+        }
+      }
+    },
+    "urgent_slot_max_hours": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 72
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/category"
+      }
+    },
+    "tier_actions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tier1",
+        "crisis",
+        "tier2",
+        "tier3",
+        "uncertain"
+      ],
+      "properties": {
+        "tier1": {
+          "$ref": "#/$defs/action"
+        },
+        "crisis": {
+          "$ref": "#/$defs/action"
+        },
+        "tier2": {
+          "$ref": "#/$defs/action"
+        },
+        "tier3": {
+          "$ref": "#/$defs/action"
+        },
+        "uncertain": {
+          "$ref": "#/$defs/action"
+        }
+      }
+    },
+    "scripts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/script"
+      }
+    }
+  },
+  "$defs": {
+    "term": {
+      "type": "string",
+      "minLength": 2,
+      "pattern": "^[a-z0-9' ]+$"
+    },
+    "category": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "tier",
+        "label",
+        "phrases",
+        "all_of_groups"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(t[123]|crisis)(_[a-z0-9]+)*$"
+        },
+        "tier": {
+          "enum": [
+            1,
+            2,
+            3,
+            "crisis"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phrases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/term"
+          }
+        },
+        "all_of_groups": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/term"
+            }
+          }
+        },
+        "reason_code": {
+          "type": "string"
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "phrases": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "all_of_groups": {
+              "minItems": 2
+            }
+          }
+        }
+      ]
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "script_id"
+      ],
+      "properties": {
+        "script_id": {
+          "type": "string"
+        },
+        "repeat_script_id": {
+          "type": "string"
+        },
+        "no_slot_script_id": {
+          "type": "string"
+        },
+        "callback_urgency": {
+          "enum": [
+            "URGENT",
+            "Normal"
+          ]
+        },
+        "stop_booking": {
+          "type": "boolean"
+        },
+        "reason_code": {
+          "type": "string"
+        }
+      }
+    },
+    "script": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "contains_first_aid"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "contains_first_aid": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

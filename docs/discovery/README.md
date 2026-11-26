@@ -12,6 +12,8 @@ Task spec: `dental-ai-tasks/tasks/P0-01 Run discovery workshop with pilot clinic
 | [review-checklist.md](review-checklist.md) | Checks a second team member completes before the log goes to the SME. |
 | [appointment-type-mapping.md](appointment-type-mapping.md) | P0-02: which visit reasons map to which Open Dental appointment type, duration and providers, and what the AI may book. Source: the seed YAML under `backend/app/domain/clinic_config/seed/`. |
 | [appointment-type-workbook.xlsx](appointment-type-workbook.xlsx) | P0-02: workbook the clinic fills in from Open Dental setup lists (never patient screens) |
+| [emergency-protocol.md](emergency-protocol.md) | P0-03: readable emergency protocol (Tier 1/2/3, crisis, uncertain), with the exact scripts the AI says, test results and pending notifications. Source: the seed YAML under `backend/app/domain/clinic_config/seed/`. |
+| [emergency-protocol-feedback-2026-11-26.md](emergency-protocol-feedback-2026-11-26.md) | P0-03: the dentist's review, item by item, with answers to the 5 open questions |
 | `signoff-YYYY-MM-DD.pdf` | The SME's written approval ("I approve version 1.0 of the clinic decision log"), added after sign-off. |
 
 ## Workshop: 90 minutes
