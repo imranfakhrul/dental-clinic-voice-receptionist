@@ -51,6 +51,7 @@ Current main specs:
 | [open-dental-access](../openspec/specs/open-dental-access/spec.md) | P0-12 |
 | [gemini-models](../openspec/specs/gemini-models/spec.md) | P0-13 |
 | [architecture-phi-flows](../openspec/specs/architecture-phi-flows/spec.md) | P0-14 |
+| [patient-message-templates](../openspec/specs/patient-message-templates/spec.md) | P0-15 |
 
 ---
 
@@ -267,10 +268,24 @@ Also updated by P0-14:
 - `dental-ai-tasks/DECISIONS.md`: #318–#321.
 - `docs/compliance/README.md`: hand-off notes for P1-01, P1-02, P1-03, P1-06, P2-01, P2-03, P3-01/P3-02, P4-01/P4-04, P0-09, P0-10.
 
-### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
-| Task | Will create | What it'll be for |
-|---|---|---|
-| P0-15 (#16) | `docs/messaging/templates.yaml`, `scripts/messaging/` | WhatsApp test number and templates now; SMS sender registration before go-live |
+### ✅ P0-15 Message templates and sender registration (#16)
+| File | What it's for |
+|---|---|
+| [docs/messaging/README.md](messaging/README.md) | Start here: files, scripts, how to change a template, status |
+| [docs/messaging/templates.yaml](messaging/templates.yaml) | **Main file:** the only message text: 4 SMS + 4 WhatsApp templates and keyword replies (schema in `templates.schema.json`) |
+| [docs/messaging/opt-in-and-help-texts.md](messaging/opt-in-and-help-texts.md) | Consent checkbox text, STOP/HELP handling, the clinic's SMS terms and privacy text |
+| [docs/messaging/registration-example-dental.md](messaging/registration-example-dental.md) | Sender registration record: WhatsApp test number and template statuses; SMS brand and campaign drafts (not submitted) |
+| `scripts/messaging/check_templates.py` | Checks the templates against the policy (rules T1–T11) |
+| `scripts/messaging/submit_whatsapp_templates.py` | Submits WhatsApp templates to Meta (dry run by default; live run deferred) |
+| `scripts/messaging/test_check_templates.py`, `test_live_scripts.py` | 33 offline tests |
+| `openspec/changes/archive/2026-11-26-p0-15-messaging-templates/` | The task plan (archived) |
+
+Also updated by P0-15:
+- `scripts/messaging/send_test_message.py`: `--template <id>` mode (APPROVED templates, example values only).
+- `.env.example`: WhatsApp test keys (no values).
+- `docs/compliance/sources/README.md`: sources M1–M11 (Twilio, Meta).
+- `dental-ai-tasks/DECISIONS.md`: #322–#323.
+- `docs/compliance/README.md`: hand-off notes for P4-01, P4-02, P4-03, P4-04, P0-10/P0-14.
 
 ---
 

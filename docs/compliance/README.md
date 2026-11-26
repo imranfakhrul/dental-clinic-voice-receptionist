@@ -77,7 +77,7 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | Task | What it relies on | Posted on issue (date) |
 |---|---|---|
 | P0-07 Messaging provider (from P0-07a) | Done in P0-07: Meta Cloud API direct for WhatsApp, Twilio for SMS (DECISIONS #300) | ✅ |
-| P0-15 Sender registration (from P0-07a) | WhatsApp test number and templates now; SMS sender (10DLC or toll-free verification) before go-live; templates may use only the fields in `messaging_policy.yaml` | - |
+| P0-15 Sender registration (from P0-07a) ✅ templates v1 done in P0-15 | WhatsApp test number and templates now; SMS sender (10DLC or toll-free verification) before go-live; templates may use only the fields in `messaging_policy.yaml` | - |
 | P0-15 Sender registration (from P0-07) | Meta Cloud API test number now; production WhatsApp and Twilio SMS registration steps in `docs/integrations/messaging-provider.md` §8 | - |
 | P0-10 Vendor matrix (from P0-07) | Rows for Meta and Twilio from `baa-meta-whatsapp.md` and `baa-twilio.md` (both NOT ACCEPTED); the test tunnel noted as test-only, no PHI | ✅ done in P0-10 (`vendors.yaml`) |
 | P0-10 Vendor matrix (from P0-08) | Row for Google Workspace (Gmail) from `baa-google-workspace.md` (NOT ACCEPTED); Mailpit is a local dev tool, not a vendor | ✅ done in P0-10 (`vendors.yaml`) |
@@ -135,3 +135,8 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P0-05, P0-07, P0-08, P0-09 (from P0-10) | When a record turns ACCEPTED/SIGNED, set that row (or clinic) to `signed` with date and record, and re-render | - |
 | P0-13 Gemini model choice | Covered entries "Generative AI on Agent Platform" and "Gemini Enterprise Agent Platform" (Vertex AI renamed); GA models only | ✅ used in P0-13 (ADR 0001) |
 | P1-02 Terraform base | `foundation.yaml`: **import** the four projects, never recreate them; the state bucket once Part B is done | - |
+| P4-01 Messaging adapter (from P0-15) | Load `docs/messaging/templates.yaml` at startup and fail if `check_templates.py` rules fail; render `{var}` for SMS and send WhatsApp as named parameters; WhatsApp STOP/START/HELP and auto-reply from `system_replies` (Twilio handles SMS keywords by default, error 21610 = opted out); template IDs and statuses from the registration record | - |
+| P4-02 Consent (from P0-15) | Consent checkbox text in `docs/messaging/opt-in-and-help-texts.md` §1, verbatim, unchecked by default, plus the policy's risk-notice sentence | - |
+| P4-03 Booking messages (from P0-15) | Formats `ddd, MMM D` and `h:mm A` in the clinic time zone; only the template fields | - |
+| P4-04 Reminders (from P0-15) | Reminder templates `reminder_sms_v1` / `reminder_wa_v1` ("today at" a time) | - |
+| P0-10 / P0-14 (from P0-15) | No new vendor or flow: templates stay within F10a/F10b fields; Twilio stays SMS-only and off until its BAA | - |

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Patient message templates (P0-15)",
+  "type": "object",
+  "required": ["schema_version", "policy_version", "reviewed_by", "reviewed_on", "date_format", "time_format", "templates", "system_replies"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "policy_version": {"type": "string"},
+    "reviewed_by": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "reviewed_on": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "date_format": {"const": "ddd, MMM D"},
+    "time_format": {"const": "h:mm A"},
+    "templates": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["id", "message_type", "channel", "version", "body", "variables", "example"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9_]+_v[0-9]+$"},
+          "message_type": {"enum": ["booking_confirmation", "reminder", "reschedule_notice", "cancel_notice"]},
+          "channel": {"enum": ["sms", "whatsapp"]},
+          "version": {"type": "integer", "minimum": 1},
+          "body": {"type": "string", "minLength": 20, "maxLength": 1024},
+          "variables": {"type": "array", "items": {"type": "string", "pattern": "^[a-z_]+$"}, "uniqueItems": true},
+          "example": {"type": "object", "additionalProperties": {"type": "string"}},
+          "whatsapp_category": {"const": "UTILITY"},
+          "provider_template_name": {"type": "string", "pattern": "^[a-z0-9_]{1,512}$"},
+          "language": {"type": "string", "pattern": "^[a-z]{2}_[A-Z]{2}$"},
+          "provider_status": {"enum": ["DRAFT", "SUBMITTED", "APPROVED", "REJECTED", "PAUSED"]}
+        },
+        "if": {"properties": {"channel": {"const": "whatsapp"}}},
+        "then": {"required": ["whatsapp_category", "provider_template_name", "language", "provider_status"]},
+        "else": {"not": {"anyOf": [{"required": ["whatsapp_category"]}, {"required": ["provider_template_name"]}, {"required": ["provider_status"]}]}}
+      }
+    },
+    "system_replies": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "whatsapp": {"$ref": "#/$defs/replies"},
+        "sms": {"$ref": "#/$defs/replies"}
+      },
+      "required": ["whatsapp", "sms"]
+    }
+  },
+  "$defs": {
+    "replies": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "stop_confirmed": {"type": "string", "minLength": 20, "maxLength": 1024},
+        "start_confirmed": {"type": "string", "minLength": 20, "maxLength": 1024},
+        "help": {"type": "string", "minLength": 20, "maxLength": 1024},
+        "auto_reply": {"type": "string", "minLength": 20, "maxLength": 1024}
+      }
+    }
+  }
+}

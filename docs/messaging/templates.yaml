@@ -1,0 +1,101 @@
+# Patient message templates (P0-15). Single source for P4-01 to P4-04: code never builds message text itself.
+# Rules: only variables from messaging_policy.yaml message_types; never_allowed_fields never; every message names the
+# clinic first and carries opt-out text; no service, reason, symptom, payment or provider words.
+# Check: python3 scripts/messaging/check_templates.py
+# Variables are written {name}. P4-01 renders them for SMS and maps them to WhatsApp named parameters {{name}}.
+# Example values are fictional (Example Dental, 555-01xx numbers) and are the only values test sends may use.
+schema_version: 1
+policy_version: "1.2"            # must equal messaging_policy.yaml decision_version
+reviewed_by: ["Riley Tech, tech lead", "Sam Comply, compliance advisor (wording)"]
+reviewed_on: "2026-11-26"
+date_format: "ddd, MMM D"        # e.g. "Tue, Mar 10", in the clinic's time zone (P4-03)
+time_format: "h:mm A"            # e.g. "9:30 AM"
+
+templates:
+  # ---------------------------------------------------------------- SMS (Twilio; production fallback for every clinic)
+  - id: booking_confirmation_sms_v1
+    message_type: booking_confirmation
+    channel: sms
+    version: 1
+    body: "{clinic_name}: Hi {first_name}, you're booked for {appointment_date} at {appointment_time}. To change it, call {clinic_phone}. Reply STOP to opt out, HELP for help."
+    variables: [clinic_name, first_name, appointment_date, appointment_time, clinic_phone]
+    example: {clinic_name: "Example Dental", first_name: "Maria", appointment_date: "Tue, Mar 10", appointment_time: "9:30 AM", clinic_phone: "(503) 555-0100"}
+  - id: reminder_sms_v1
+    message_type: reminder
+    channel: sms
+    version: 1
+    body: "{clinic_name}: Hi {first_name}, reminder: your visit is today at {appointment_time}. To change it, call {clinic_phone}. Reply STOP to opt out."
+    variables: [clinic_name, first_name, appointment_time, clinic_phone]
+    example: {clinic_name: "Example Dental", first_name: "Maria", appointment_time: "9:30 AM", clinic_phone: "(503) 555-0100"}
+  - id: reschedule_notice_sms_v1
+    message_type: reschedule_notice
+    channel: sms
+    version: 1
+    body: "{clinic_name}: Hi {first_name}, your visit is now {appointment_date} at {appointment_time}. Questions? Call {clinic_phone}. Reply STOP to opt out."
+    variables: [clinic_name, first_name, appointment_date, appointment_time, clinic_phone]
+    example: {clinic_name: "Example Dental", first_name: "Maria", appointment_date: "Thu, Mar 12", appointment_time: "2:00 PM", clinic_phone: "(503) 555-0100"}
+  - id: cancel_notice_sms_v1
+    message_type: cancel_notice
+    channel: sms
+    version: 1
+    body: "{clinic_name}: Hi {first_name}, your visit on {appointment_date} is cancelled. To book again, call {clinic_phone}. Reply STOP to opt out."
+    variables: [clinic_name, first_name, appointment_date, clinic_phone]
+    example: {clinic_name: "Example Dental", first_name: "Maria", appointment_date: "Tue, Mar 10", clinic_phone: "(503) 555-0100"}
+
+  # ---------------------------------------------------------------- WhatsApp (Meta Cloud API; testing now, synthetic only;
+  # real patients only after the WhatsApp gate in messaging_policy.yaml). Utility templates; can't start or end with a variable.
+  - id: booking_confirmation_wa_v1
+    message_type: booking_confirmation
+    channel: whatsapp
+    version: 1
+    whatsapp_category: UTILITY
+    provider_template_name: booking_confirmation_wa_v1
+    language: en_US
+    provider_status: DRAFT
+    body: "Hello {first_name}, this is {clinic_name}. You're booked for {appointment_date} at {appointment_time}. To change it, please call {clinic_phone}. Reply STOP to opt out."
+    variables: [first_name, clinic_name, appointment_date, appointment_time, clinic_phone]
+    example: {first_name: "Maria", clinic_name: "Example Dental", appointment_date: "Tue, Mar 10", appointment_time: "9:30 AM", clinic_phone: "(503) 555-0100"}
+  - id: reminder_wa_v1
+    message_type: reminder
+    channel: whatsapp
+    version: 1
+    whatsapp_category: UTILITY
+    provider_template_name: reminder_wa_v1
+    language: en_US
+    provider_status: DRAFT
+    body: "Hello {first_name}, this is {clinic_name} with a reminder: your visit is today at {appointment_time}. To change it, please call {clinic_phone}. Reply STOP to opt out."
+    variables: [first_name, clinic_name, appointment_time, clinic_phone]
+    example: {first_name: "Maria", clinic_name: "Example Dental", appointment_time: "9:30 AM", clinic_phone: "(503) 555-0100"}
+  - id: reschedule_notice_wa_v1
+    message_type: reschedule_notice
+    channel: whatsapp
+    version: 1
+    whatsapp_category: UTILITY
+    provider_template_name: reschedule_notice_wa_v1
+    language: en_US
+    provider_status: DRAFT
+    body: "Hello {first_name}, this is {clinic_name}. Your visit is now {appointment_date} at {appointment_time}. Questions? Please call {clinic_phone}. Reply STOP to opt out."
+    variables: [first_name, clinic_name, appointment_date, appointment_time, clinic_phone]
+    example: {first_name: "Maria", clinic_name: "Example Dental", appointment_date: "Thu, Mar 12", appointment_time: "2:00 PM", clinic_phone: "(503) 555-0100"}
+  - id: cancel_notice_wa_v1
+    message_type: cancel_notice
+    channel: whatsapp
+    version: 1
+    whatsapp_category: UTILITY
+    provider_template_name: cancel_notice_wa_v1
+    language: en_US
+    provider_status: DRAFT
+    body: "Hello {first_name}, this is {clinic_name}. Your visit on {appointment_date} is cancelled. To book again, please call {clinic_phone}. Reply STOP to opt out."
+    variables: [first_name, clinic_name, appointment_date, clinic_phone]
+    example: {first_name: "Maria", clinic_name: "Example Dental", appointment_date: "Tue, Mar 10", clinic_phone: "(503) 555-0100"}
+
+# Keyword replies. Only {clinic_name} and {clinic_phone}; never patient data.
+system_replies:
+  whatsapp:                      # sent by P4-01 (WhatsApp has no carrier-level STOP), free-form inside the 24-hour window
+    stop_confirmed: "You won't get any more appointment messages from {clinic_name} on WhatsApp. Reply START to turn them back on."
+    start_confirmed: "Appointment messages from {clinic_name} are turned back on. Reply STOP at any time to turn them off."
+    help: "{clinic_name} appointment messages. For help, call {clinic_phone}. Reply STOP to turn them off."
+    auto_reply: "This number doesn't read replies. To change or cancel an appointment, please call {clinic_phone}. Reply STOP to turn off messages."
+  sms:                           # Twilio handles STOP/START by default; these are used only if Advanced Opt-Out is turned on
+    stop_confirmed: "{clinic_name}: You're unsubscribed and won't get more texts. Reply START to resubscribe."
+    help: "{clinic_name} appointment texts. For help call {clinic_phone}. Reply STOP to opt out. Msg & data rates may apply."
