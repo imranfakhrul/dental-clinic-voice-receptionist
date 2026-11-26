@@ -14,7 +14,7 @@ context: |
 
 rules:
   tasks:
-    - "The last task is: Commit with a one-line message and ask the user before pushing the phase branch feature/phase-<N>-<name> (one branch per phase; the senior merges into main; no PR)"
+    - "The last task is: After the user has reviewed the work and given the go-ahead, commit with a one-line descriptive message, push the phase branch feature/phase-<N>-<name>, close the GitHub sub-issue with a comment listing the files, and archive the change. Do none of these before the user says so (one branch per phase; the senior merges into main; no PR)"
 
 # Project context (optional)
 # Add only constraints that should guide OpenSpec artifacts and workflows.
