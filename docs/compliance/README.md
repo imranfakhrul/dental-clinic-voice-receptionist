@@ -4,6 +4,8 @@
 |---|---|
 | [baa-google-cloud.md](baa-google-cloud.md) | Google Cloud HIPAA BAA record. Status **NOT ACCEPTED**. Includes the covered-products snapshot (2026-11-26). P0-10 imports it into the vendor matrix. |
 | [bootstrap-checks-2026-11-26.md](bootstrap-checks-2026-11-26.md) | Output of the Google Cloud setup checks (P0-05) |
+| [baa-meta-whatsapp.md](baa-meta-whatsapp.md) | Meta (WhatsApp Cloud API) BAA record (P0-07): **NOT ACCEPTED**; Meta's terms say it isn't a business associate; written request drafted |
+| [baa-twilio.md](baa-twilio.md) | Twilio (Programmable SMS) BAA record (P0-07): **NOT ACCEPTED**; needs Security/Enterprise Edition; written request drafted |
 | [patient-messaging-decision.md](patient-messaging-decision.md) | Patient messaging decision (P0-07a): **WhatsApp now** (testing, synthetic data); **at go-live each clinic chooses SMS or WhatsApp**, WhatsApp with real details only after a signed Meta BAA (else SMS); sources, advisor answers, signatures |
 | [messaging_policy.yaml](messaging_policy.yaml) | Machine-readable content policy: allowed channel and fields per message type (check: `scripts/compliance/check_messaging_policy.py`) |
 | [sources/README.md](sources/README.md) | Dated, fingerprinted sources for the messaging decision |
@@ -33,7 +35,7 @@ Every item must be done before any real PHI enters `dai-rcpt-prod` (dev, staging
 | VPC-SC perimeters `dai_prod` (enforced), `dai_dev` and `dai_staging` (dry-run) | Need an organization | P0-06 / P1-02 |
 | Speech-to-Text data logging confirmed off with a screenshot | API not enabled yet (so it can't be on) | P3-03 |
 | Clinic ↔ company BAA | Not signed | P0-09 |
-| Messaging BAA for the clinic's chosen channel: SMS provider BAA, or for WhatsApp BAAs with Meta and the WhatsApp provider | Not signed; Meta's terms currently say it isn't a business associate | P0-07 (DECISIONS #299) |
+| Messaging BAA for the clinic's chosen channel: Twilio for SMS ([baa-twilio.md](baa-twilio.md)), Meta for WhatsApp ([baa-meta-whatsapp.md](baa-meta-whatsapp.md)) | Both NOT ACCEPTED; requests drafted, not sent; Meta's terms currently say it isn't a business associate | P0-07 (DECISIONS #299–#301) |
 | Vendor matrix lists every PHI vendor with a signed BAA | Not built | P0-10 |
 
 ## Pending notifications
@@ -41,8 +43,12 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 
 | Task | What it relies on | Posted on issue (date) |
 |---|---|---|
-| P0-07 Messaging provider (from P0-07a) | Two providers: a WhatsApp provider (testing now; production only with BAAs from it **and from Meta**, so request Meta's BAA in writing early), and an SMS provider whose signed BAA names its SMS product (Twilio Security/Enterprise Edition, Vonage US traffic; Sinch/Infobip product list in writing); dedicated number; `messaging_policy.yaml` | - |
+| P0-07 Messaging provider (from P0-07a) | Done in P0-07: Meta Cloud API direct for WhatsApp, Twilio for SMS (DECISIONS #300) | ✅ |
 | P0-15 Sender registration (from P0-07a) | WhatsApp test number and templates now; SMS sender (10DLC or toll-free verification) before go-live; templates may use only the fields in `messaging_policy.yaml` | - |
+| P0-15 Sender registration (from P0-07) | Meta Cloud API test number now; production WhatsApp and Twilio SMS registration steps in `docs/integrations/messaging-provider.md` §8 | - |
+| P0-10 Vendor matrix (from P0-07) | Rows for Meta and Twilio from `baa-meta-whatsapp.md` and `baa-twilio.md` (both NOT ACCEPTED); the test tunnel noted as test-only, no PHI | - |
+| P4-01 / P4-06 / P4-07 (from P0-07) | Integration facts in `messaging-provider.md` §7: Graph API v27.0, `X-Hub-Signature-256`, status values, no WhatsApp STOP keyword handling (P4-07 must detect it), Twilio `X-Twilio-Signature` via SDK validator; **P4-06 runs the deferred live webhook test** | - |
+| P1-05 Secrets (from P0-07) | Create `whatsapp-access-token`, `whatsapp-app-secret`, `whatsapp-webhook-verify-token`; later `twilio-account-sid`, `twilio-auth-token`, `twilio-messaging-service-sid` | - |
 | P0-09 Clinic ↔ company BAA (from P0-07a) | Must mention subcontractors under their own BAAs, including the messaging vendors of the clinic's chosen channel: the SMS provider, or Meta and the WhatsApp provider (advisor answer 5, DECISIONS #299) | - |
 | P4-01 / P4-03 / P4-04 / P4-07 / P4-08 (from P0-07a) | Enforce `messaging_policy.yaml` (refuse disallowed channel, unknown or never-allowed fields); opt-out text in every message; both adapters, WhatsApp active for testing, SMS switched off until go-live | - |
 | P4-02 Consent (from P0-07a) | Consent names the channel and message types, carries the SMS risk notice, rates notice, STOP/HELP, "not required to book"; dated record; wording approved by the advisor | - |

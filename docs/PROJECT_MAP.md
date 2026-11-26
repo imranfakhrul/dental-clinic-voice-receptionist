@@ -43,6 +43,7 @@ Current main specs:
 | [cloud-foundation](../openspec/specs/cloud-foundation/spec.md) | P0-05 |
 | [hipaa-guardrails](../openspec/specs/hipaa-guardrails/spec.md) | P0-06 |
 | [patient-messaging-policy](../openspec/specs/patient-messaging-policy/spec.md) | P0-07a |
+| [messaging-provider](../openspec/specs/messaging-provider/spec.md) | P0-07 |
 
 ---
 
@@ -117,10 +118,25 @@ Current main specs:
 | `scripts/compliance/check_messaging_policy.py` | Checks the policy file is consistent |
 | `openspec/changes/archive/2026-11-26-p0-07a-messaging-channel-decision/` | The task plan (archived) |
 
+### ✅ P0-07 Messaging providers (#8)
+| File | What it's for |
+|---|---|
+| [docs/integrations/messaging-provider.md](integrations/messaging-provider.md) | Provider comparison, the choice (Meta for WhatsApp, Twilio for SMS), integration facts, registration steps |
+| [docs/compliance/baa-meta-whatsapp.md](compliance/baa-meta-whatsapp.md) | Meta BAA record (paper, NOT ACCEPTED) and the request to send |
+| [docs/compliance/baa-twilio.md](compliance/baa-twilio.md) | Twilio BAA record (paper, NOT ACCEPTED) and the request to send |
+| `scripts/messaging/send_test_message.py` | Sends one fake WhatsApp test message |
+| `scripts/messaging/webhook_probe.py` | Receives WhatsApp webhooks and checks their signature (test only; live webhook test deferred to P4-06) |
+| `openspec/changes/archive/2026-11-26-p0-07-messaging-provider-selection/` | The task plan (archived) |
+
+Also updated by P0-07:
+- `docs/compliance/sources/README.md`: where each provider fact came from (Meta M1–M9, Twilio T1–T8, Vonage, Sinch, Infobip, 360dialog).
+- `dental-ai-tasks/DECISIONS.md`: #300 (providers chosen), #301 (paper BAAs, no SMS account yet, temporary tunnel for the test).
+- `docs/compliance/README.md`: lists the two BAA records, what's pending before real PHI, and notes for P0-10, P0-15, P4-01/06/07 and P1-05.
+- `docs/phase-0-discovery-compliance/README.md`: #8 status.
+
 ### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
 | Task | Will create | What it'll be for |
 |---|---|---|
-| P0-07 (#8) | `docs/integrations/messaging-provider.md` | WhatsApp provider (and the Meta BAA request) and the SMS provider with a BAA |
 | P0-08 (#9) | `docs/integrations/admin-email.md` | How callback emails reach the clinic admin, and that BAA |
 | P0-09 (#10) | `docs/compliance/baa/` | The BAA between the clinic and the company |
 | P0-10 (#11) | `docs/compliance/vendors.yaml`, `scripts/compliance/` | Every vendor that may touch patient data, and its BAA status |

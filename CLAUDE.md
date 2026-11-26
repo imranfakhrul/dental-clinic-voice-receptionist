@@ -14,6 +14,9 @@ that are emailed to the clinic admin (there is no live transfer). It must be **H
 - The next phases go on GitHub only when the senior asks, using the same pattern: one parent issue per phase,
   tasks as sub-issues, full spec as the issue body.
 - The code layout below is **Proposed** until P1-01 is built (DECISIONS #2).
+- **Local-first (DECISIONS #302):** until the client chooses hosting, run everything possible locally (docker compose:
+  API, Postgres, Redis) with synthetic data only. Create no Google Cloud resources; use cloud-only services (Gemini, Speech,
+  WhatsApp, Open Dental) only when a task needs them.
 
 ## Where things are
 | Path | What |
