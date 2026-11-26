@@ -37,7 +37,7 @@ Status values: ✅ done · 🟡 in progress · ⬜ not started.
 | #7 | P0-07a Patient messaging channel decision (memo) | S | - | `docs/compliance/patient-messaging-decision.md` | ✅ WhatsApp now (testing); at go-live each clinic chooses SMS or WhatsApp (WhatsApp needs a signed Meta BAA) |
 | #8 | P0-07 Messaging provider that signs a BAA | S | #7 | `docs/integrations/messaging-provider.md` | ✅ Meta Cloud API (WhatsApp, testing; live test message passed) and Twilio (SMS, off); BAAs on paper; live webhook test in P4-06 |
 | #9 | P0-08 Admin email route + BAA | S | #1 | `docs/integrations/admin-email.md` | ✅ Gmail route designed, link-only default; Mailpit test passed; Gmail test pending; Workspace and BAA at production |
-| #10 | P0-09 Clinic ↔ company BAA | S | #1 | `docs/compliance/baa/` | ⬜ |
+| #10 | P0-09 Clinic ↔ company BAA | S | #1 | `docs/compliance/baa/` | ✅ checklist, annexes, commitments, template v1 drafted; record NOT SIGNED (no counsel) |
 | #11 | P0-10 Vendor/BAA matrix | S | #5 | `docs/compliance/vendors.yaml`, `scripts/compliance/` | ⬜ |
 | #12 | P0-11 Risk assessment v1 | M | #11 | `docs/compliance/risk/` | ⬜ |
 

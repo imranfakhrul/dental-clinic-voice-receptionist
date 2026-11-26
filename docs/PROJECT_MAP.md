@@ -45,6 +45,7 @@ Current main specs:
 | [patient-messaging-policy](../openspec/specs/patient-messaging-policy/spec.md) | P0-07a |
 | [messaging-provider](../openspec/specs/messaging-provider/spec.md) | P0-07 |
 | [admin-callback-email](../openspec/specs/admin-callback-email/spec.md) | P0-08 |
+| [clinic-baa](../openspec/specs/clinic-baa/spec.md) | P0-09 |
 
 ---
 
@@ -155,10 +156,26 @@ Also updated by P0-08:
 - `docs/compliance/README.md`: lists the new files, what's pending before real PHI, and notes for P2-23, P2-22, P4-13/14, P0-06/P1-05 and P0-10.
 - `docs/phase-0-discovery-compliance/README.md`: #9 status.
 
+### ✅ P0-09 Clinic ↔ company BAA (#10)
+| File | What it's for |
+|---|---|
+| [docs/compliance/baa/clinic-baa-template-v1.md](compliance/baa/clinic-baa-template-v1.md) | **Main file:** the draft BAA (from the HHS sample), for counsel to finalize |
+| [docs/compliance/baa/requirements-checklist.md](compliance/baa/requirements-checklist.md) | What any clinic BAA must contain (R1–R11 from HIPAA, our terms P1–P9), with pass/fail |
+| [docs/compliance/baa/annex-a-data-and-purposes.md](compliance/baa/annex-a-data-and-purposes.md) | Which patient data we handle, why, where, and for how long |
+| [docs/compliance/baa/annex-b-subcontractors.md](compliance/baa/annex-b-subcontractors.md) | Our vendors that may get patient data, and their BAA status |
+| [docs/compliance/baa/commitments.md](compliance/baa/commitments.md) | Every BAA promise → the task that keeps it |
+| [docs/compliance/baa-clinic-example-dental.md](compliance/baa-clinic-example-dental.md) | The clinic BAA record: NOT SIGNED, reviews, clinic comments, gates |
+| `openspec/changes/archive/2026-11-26-p0-09-clinic-baa/` | The task plan (archived) |
+
+Also updated by P0-09:
+- `docs/compliance/sources/README.md`: sources L1–L7 (eCFR sections, HHS pages).
+- `dental-ai-tasks/DECISIONS.md`: #305 (template v1 and proposed terms), #306 (no counsel, NOT SIGNED, signed copy kept private).
+- `docs/compliance/README.md`: lists the new files, the clinic BAA pending item, and notes for P0-10, P0-11, P0-12, P1-07, P5-12 and P5-14.
+- `docs/phase-0-discovery-compliance/README.md`: #10 status.
+
 ### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
 | Task | Will create | What it'll be for |
 |---|---|---|
-| P0-09 (#10) | `docs/compliance/baa/` | The BAA between the clinic and the company |
 | P0-10 (#11) | `docs/compliance/vendors.yaml`, `scripts/compliance/` | Every vendor that may touch patient data, and its BAA status |
 | P0-11 (#12) | `docs/compliance/risk/` | HIPAA risk assessment v1 |
 | P0-12 (#13) | `scripts/open_dental/`, `docs/integrations/open-dental-test-db.md` | Open Dental API keys (in Secret Manager, never in the repo) and the test database |

@@ -6,6 +6,8 @@
 | [bootstrap-checks-2026-11-26.md](bootstrap-checks-2026-11-26.md) | Output of the Google Cloud setup checks (P0-05) |
 | [baa-google-workspace.md](baa-google-workspace.md) | Google Workspace BAA record (P0-08): **NOT ACCEPTED**; no domain or Workspace until production |
 | [email-readiness-example-dental.md](email-readiness-example-dental.md) | Callback email readiness for our clinic (P0-08): **not ready**, placeholder address |
+| [baa/](baa/) | Clinic ↔ company BAA (P0-09): [requirements checklist](baa/requirements-checklist.md), [Annex A](baa/annex-a-data-and-purposes.md) (data and purposes), [Annex B](baa/annex-b-subcontractors.md) (subcontractors), [commitments](baa/commitments.md), [template v1 draft](baa/clinic-baa-template-v1.md) |
+| [baa-clinic-example-dental.md](baa-clinic-example-dental.md) | Clinic BAA record (P0-09): **NOT SIGNED**; no counsel engaged; reviews and clinic comments |
 | [baa-meta-whatsapp.md](baa-meta-whatsapp.md) | Meta (WhatsApp Cloud API) BAA record (P0-07): **NOT ACCEPTED**; Meta's terms say it isn't a business associate; written request drafted |
 | [baa-twilio.md](baa-twilio.md) | Twilio (Programmable SMS) BAA record (P0-07): **NOT ACCEPTED**; needs Security/Enterprise Edition; written request drafted |
 | [patient-messaging-decision.md](patient-messaging-decision.md) | Patient messaging decision (P0-07a): **WhatsApp now** (testing, synthetic data); **at go-live each clinic chooses SMS or WhatsApp**, WhatsApp with real details only after a signed Meta BAA (else SMS); sources, advisor answers, signatures |
@@ -36,7 +38,7 @@ Every item must be done before any real PHI enters `dai-rcpt-prod` (dev, staging
 | Org policies (service allow-list, Gemini Developer API deny, US-only locations, no SA keys, domain-restricted IAM, no public buckets or SQL public IP, no VM external IPs): apply `infra/org/` Terraform and run the negative tests | Org policies can't be set without an organization (DECISIONS #296) | P0-06 (guardrails runbook) |
 | VPC-SC perimeters `dai_prod` (enforced), `dai_dev` and `dai_staging` (dry-run) | Need an organization | P0-06 / P1-02 |
 | Speech-to-Text data logging confirmed off with a screenshot | API not enabled yet (so it can't be on) | P3-03 |
-| Clinic ↔ company BAA | Not signed | P0-09 |
+| Clinic ↔ company BAA ([baa-clinic-example-dental.md](baa-clinic-example-dental.md)): counsel finalizes template v1, sponsor decides outside-US access and names our signatory, both parties sign | Paper record, NOT SIGNED; no counsel engaged | P0-09 (DECISIONS #305, #306) |
 | Messaging BAA for the clinic's chosen channel: Twilio for SMS ([baa-twilio.md](baa-twilio.md)), Meta for WhatsApp ([baa-meta-whatsapp.md](baa-meta-whatsapp.md)) | Both NOT ACCEPTED; requests drafted, not sent; Meta's terms currently say it isn't a business associate | P0-07 (DECISIONS #299–#301) |
 | Callback email: company domain, Google Workspace and its BAA ([baa-google-workspace.md](baa-google-workspace.md)), `callbacks@` lock-down, SPF/DKIM/DMARC, TLS rule per clinic, readiness with the clinic's real domain | Bought for production; Workspace BAA NOT ACCEPTED | P0-08 (DECISIONS #303, #304) |
 | Vendor matrix lists every PHI vendor with a signed BAA | Not built | P0-10 |
@@ -58,6 +60,12 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P4-01 / P4-06 / P4-07 (from P0-07) | Integration facts in `messaging-provider.md` §7: Graph API v27.0, `X-Hub-Signature-256`, status values, no WhatsApp STOP keyword handling (P4-07 must detect it), Twilio `X-Twilio-Signature` via SDK validator; **P4-06 runs the deferred live webhook test** | - |
 | P1-05 Secrets (from P0-07) | Create `whatsapp-access-token`, `whatsapp-app-secret`, `whatsapp-webhook-verify-token`; later `twilio-account-sid`, `twilio-auth-token`, `twilio-messaging-service-sid` | - |
 | P0-09 Clinic ↔ company BAA (from P0-07a) | Must mention subcontractors under their own BAAs, including the messaging vendors of the clinic's chosen channel: the SMS provider, or Meta and the WhatsApp provider (advisor answer 5, DECISIONS #299) | - |
+| P0-10 Vendor matrix (from P0-09) | Import Annex B (`baa/annex-b-subcontractors.md`) and the clinic BAA record (NOT SIGNED); the 30-day subcontractor notice (C8) is part of the matrix change process | - |
+| P0-11 Risk assessment (from P0-09) | Annex A as the data inventory; commitments C1–C22 as controls; open questions: outside-US access, Open Dental relay | - |
+| P0-12 Open Dental keys (from P0-09) | **The clinic's production key may not be requested until the clinic BAA record says SIGNED**; test database only | - |
+| P1-07 Audit log (from P0-09, spec named P1-12) | Audit retention 6 years (C20); audit entries must support the accounting-of-disclosures information (C10) | - |
+| P5-12 Incident response and retention (from P0-09) | Breach notice ≤ 5 business days (C4); check a same-day heads-up for v2; access/amendment requests forwarded in 5 business days, accounting info in 10 (C9, C10); return/destroy in 30 days with certificate (C13) | - |
+| P5-14 HIPAA readiness (from P0-09) | Checklist, commitments and the signed record as evidence | - |
 | P4-01 / P4-03 / P4-04 / P4-07 / P4-08 (from P0-07a) | Enforce `messaging_policy.yaml` (refuse disallowed channel, unknown or never-allowed fields); opt-out text in every message; both adapters, WhatsApp active for testing, SMS switched off until go-live | - |
 | P4-02 Consent (from P0-07a) | Consent names the channel and message types, carries the SMS risk notice, rates notice, STOP/HELP, "not required to book"; dated record; wording approved by the advisor | - |
 | P0-13 Gemini model choice (from P0-06) | Gemini only via `aiplatform.googleapis.com` (Developer API never enabled); US regional endpoint only, since the location policy doesn't cover global endpoints | - |
