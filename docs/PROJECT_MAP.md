@@ -42,6 +42,7 @@ Current main specs:
 | [conversation-state-machine](../openspec/specs/conversation-state-machine/spec.md) | P0-04 |
 | [cloud-foundation](../openspec/specs/cloud-foundation/spec.md) | P0-05 |
 | [hipaa-guardrails](../openspec/specs/hipaa-guardrails/spec.md) | P0-06 |
+| [patient-messaging-policy](../openspec/specs/patient-messaging-policy/spec.md) | P0-07a |
 
 ---
 
@@ -107,11 +108,19 @@ Current main specs:
 | [docs/runbooks/org-guardrails-tests.md](runbooks/org-guardrails-tests.md) | Tests to re-run after any guardrail change, and the steps for when an organization exists |
 | `openspec/changes/archive/2026-11-26-p0-06-hipaa-guardrails/` | The task plan (archived) |
 
+### ✅ P0-07a Patient messaging channel (#7)
+| File | What it's for |
+|---|---|
+| [docs/compliance/patient-messaging-decision.md](compliance/patient-messaging-decision.md) | The decision memo: facts, options, advisor answers, signed decision (**WhatsApp now; clinic chooses SMS or WhatsApp at go-live**) |
+| `docs/compliance/messaging_policy.yaml` | Rules later code must enforce: allowed channel and fields per message, fields never allowed |
+| [docs/compliance/sources/README.md](compliance/sources/README.md) | Where each fact came from: URL, date, quote, fingerprint |
+| `scripts/compliance/check_messaging_policy.py` | Checks the policy file is consistent |
+| `openspec/changes/archive/2026-11-26-p0-07a-messaging-channel-decision/` | The task plan (archived) |
+
 ### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
 | Task | Will create | What it'll be for |
 |---|---|---|
-| P0-07a (#7) | `docs/compliance/patient-messaging-decision.md` | Which patient messaging channel is HIPAA-safe |
-| P0-07 (#8) | `docs/integrations/messaging-provider.md` | The chosen messaging provider and its BAA |
+| P0-07 (#8) | `docs/integrations/messaging-provider.md` | WhatsApp provider (and the Meta BAA request) and the SMS provider with a BAA |
 | P0-08 (#9) | `docs/integrations/admin-email.md` | How callback emails reach the clinic admin, and that BAA |
 | P0-09 (#10) | `docs/compliance/baa/` | The BAA between the clinic and the company |
 | P0-10 (#11) | `docs/compliance/vendors.yaml`, `scripts/compliance/` | Every vendor that may touch patient data, and its BAA status |
@@ -119,7 +128,7 @@ Current main specs:
 | P0-12 (#13) | `scripts/open_dental/`, `docs/integrations/open-dental-test-db.md` | Open Dental API keys (in Secret Manager, never in the repo) and the test database |
 | P0-13 (#14) | `docs/adr/0001-gemini-models.md`, `evals/spike/p0-13/` | Which Gemini model versions we use per tier, and the test results |
 | P0-14 (#15) | `docs/architecture/` | Architecture document and patient-data flow diagram |
-| P0-15 (#16) | `docs/messaging/templates.yaml`, `scripts/messaging/` | Messaging sender registration and message templates |
+| P0-15 (#16) | `docs/messaging/templates.yaml`, `scripts/messaging/` | WhatsApp test number and templates now; SMS sender registration before go-live |
 
 ---
 

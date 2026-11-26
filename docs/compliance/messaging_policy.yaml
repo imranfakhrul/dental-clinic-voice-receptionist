@@ -1,0 +1,53 @@
+# Patient messaging content policy (P0-07a, decision_version 1.2). Hard limits for P4-01 to P4-08:
+# - testing sends only on the testing channel, with synthetic data, to team test numbers;
+# - production sends on the clinic's chosen channel only if that channel is allowed with PHI, else on its fallback;
+# - refuse any template variable not in that message type's fields;
+# - never_allowed_fields may never appear in any template.
+# Check: python3 scripts/compliance/check_messaging_policy.py docs/compliance/messaging_policy.yaml
+schema_version: 3
+decision_version: "1.2"
+decided_on: "2026-11-26"
+approved_by: ["Sam Comply, compliance advisor", "Morgan Lead, project sponsor"]
+memo: docs/compliance/patient-messaging-decision.md
+
+environments:
+  testing:                      # dev and staging: synthetic data only (DECISIONS #25)
+    active_channel: whatsapp
+    data: synthetic_only
+    recipients: team_test_numbers_only
+  production:                   # real patients and real PHI
+    live: false
+    channel_choice: per_clinic  # each clinic picks one at go-live (clinic config, P1-19 / P4-13)
+    clinic_options: [sms, whatsapp]
+
+channels:
+  whatsapp:
+    integrated: true            # built in P4-01 (WhatsApp provider adapter)
+    enabled: true               # used now, for testing
+    allowed_with_phi: false     # becomes true only when the gate below is met and recorded
+    phi_gate: "Signed BAAs with Meta and with the WhatsApp provider, recorded in the vendor matrix (P0-10). Meta's terms (S1, 2026-09-23) currently say Meta is not a business associate."
+    fallback_until_gate: sms    # a clinic that chose WhatsApp uses SMS (or waits) until the gate is met
+  sms:
+    integrated: true            # built in P4-01 (SMS provider adapter)
+    enabled: false              # switched on at go-live for clinics that use it
+    allowed_with_phi: true
+    provider_baa_required: true       # the signed BAA must name the provider's SMS product (P0-07)
+    dedicated_number_required: true
+  email:
+    integrated: false
+    enabled: false
+    allowed_with_phi: false
+
+message_types:
+  booking_confirmation: {fields: [first_name, clinic_name, appointment_date, appointment_time, clinic_phone]}
+  reminder:             {fields: [first_name, clinic_name, appointment_date, appointment_time, clinic_phone]}
+  reschedule_notice:    {fields: [first_name, clinic_name, appointment_date, appointment_time, clinic_phone]}
+  cancel_notice:        {fields: [first_name, clinic_name, appointment_date, clinic_phone]}
+never_allowed_fields: [last_name, dob, reason, reason_code, procedure, symptoms, provider_name, insurance, pat_num, apt_num]
+opt_out_text_required: true     # every message carries opt-out text (P4-07)
+consent:
+  required: true
+  risk_notice_required: true    # neither SMS nor WhatsApp is covered end to end by our BAAs (advisor answer 3)
+  record_required: true         # dated consent record (P4-02)
+  wording_owner: P4-02
+  wording_approval: compliance advisor
