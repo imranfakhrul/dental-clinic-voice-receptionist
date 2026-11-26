@@ -1,0 +1,11 @@
+ref,patient_ref,day,time,minutes,op,prov,appointment_type,status,purpose
+A01,P19,+10 business days,09:00,60,3,HYG1,Recall,Scheduled,Future appointment (reschedule and cancel tests)
+A02,P19,+25 business days,14:00,30,1,DDS1,Limited Exam,Scheduled,Second future appointment (patient with more than one)
+A03,P20,+5 business days,10:00,60,3,HYG1,Recall,Broken,Broken appointment (via Break; on the Unscheduled List)
+A04,P21,-20 business days,08:00,60,4,HYG2,Recall,Complete,Past appointment only
+A05,P22,first Monday after the next US DST change,08:00,60,4,HYG2,Recall,Scheduled,DST edge (P5-04)
+A06,P23,+3 business days,13:00,30,1,DDS1,Limited Exam,Scheduled,Double-booking target: tests try to book this slot again
+A07,P01,+2 business days,08:00,60,3,HYG1,Recall,Scheduled,Fills a morning gap
+A08,P31,+2 business days,09:00,60,4,HYG2,Recall,Scheduled,Fills a morning gap
+A09,P07,+4 business days,08:00,60,1,DDS1,New Patient Exam,Scheduled,Makes Tue/Thu new-patient block partly full
+A10,P28,+6 business days,15:00,30,2,DDS1,Limited Exam,Scheduled,Afternoon gap

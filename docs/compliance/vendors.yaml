@@ -57,7 +57,7 @@ vendors:
     baa: {status: under_review, type: clinic_arrangement, record: null}
     owner: "Sam Comply (compliance advisor)"
     tasks: [P0-09, P0-12]
-    notes: "Counsel decides whether the clinic's own arrangement with Open Dental covers the relay (P0-09 Annex B open question). dev and staging use the Open Dental test database only."
+    notes: "Counsel decides whether the clinic's own arrangement with Open Dental covers the relay (P0-09 Annex B open question). dev and staging use the Open Dental test database only. Fees: $30 per location per month, paid by us, while a key is enabled (P0-12, DECISIONS #312). No developer key yet."
 
   - id: github
     name: GitHub

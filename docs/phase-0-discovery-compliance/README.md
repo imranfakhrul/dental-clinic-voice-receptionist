@@ -44,7 +44,7 @@ Status values: ✅ done · 🟡 in progress · ⬜ not started.
 ### E0.3 Technical setup decisions
 | Issue | Task | Size | Depends on | Main output | Status |
 |---|---|---|---|---|---|
-| #13 | P0-12 Open Dental API keys + test database | S | #1 | `scripts/open_dental/`, `docs/integrations/open-dental-test-db.md` | ⬜ |
+| #13 | P0-12 Open Dental API keys + test database | S | #1 | `scripts/open_dental/`, `docs/integrations/open-dental-test-db.md` | ✅ permissions refined, email drafted, seed ready; developer key, test DB (B) and hosted smoke test pending |
 | #14 | P0-13 GA Gemini model versions per tier | S | #6 | `docs/adr/0001-gemini-models.md`, `evals/spike/p0-13/` | ⬜ |
 | #15 | P0-14 Architecture doc + PHI data-flow diagram | M | #4, #14 | `docs/architecture/` | ⬜ |
 | #16 | P0-15 Messaging sender registration + templates | M | #8, #7, #1 | `docs/messaging/templates.yaml`, `scripts/messaging/` | ⬜ |

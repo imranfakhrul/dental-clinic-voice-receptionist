@@ -39,7 +39,7 @@ Notes:
 - **google-cloud:** Record says NOT ACCEPTED (paper, DECISIONS #293). Only APIs in allowed_services.yaml may be used; real PHI only in prod (DECISIONS #25). Hosting is local-first until the client chooses (DECISIONS #302).
 - **twilio:** Record says NOT ACCEPTED; BAA needs Security or Enterprise Edition. No account yet (DECISIONS #301). Messages carry only first name, clinic, date, time (messaging_policy.yaml).
 - **meta-whatsapp:** Record says NOT ACCEPTED; Meta's terms say it isn't a business associate. Used now for testing only, synthetic data to team test numbers (messaging_policy.yaml allowed_with_phi: false).
-- **open-dental:** Counsel decides whether the clinic's own arrangement with Open Dental covers the relay (P0-09 Annex B open question). dev and staging use the Open Dental test database only.
+- **open-dental:** Counsel decides whether the clinic's own arrangement with Open Dental covers the relay (P0-09 Annex B open question). dev and staging use the Open Dental test database only. Fees: $30 per location per month, paid by us, while a key is enabled (P0-12, DECISIONS #312). No developer key yet.
 - **ai-coding-assistant:** Added for spec §14 (team tools that may see PHI by accident). If it is ever used on prod data or logs, it needs a BAA first.
 
 ## Clinics

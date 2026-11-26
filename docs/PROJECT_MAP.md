@@ -48,6 +48,7 @@ Current main specs:
 | [clinic-baa](../openspec/specs/clinic-baa/spec.md) | P0-09 |
 | [vendor-baa-matrix](../openspec/specs/vendor-baa-matrix/spec.md) | P0-10 |
 | [risk-assessment](../openspec/specs/risk-assessment/spec.md) | P0-11 |
+| [open-dental-access](../openspec/specs/open-dental-access/spec.md) | P0-12 |
 
 ---
 
@@ -208,10 +209,29 @@ Also updated by P0-11:
 - `docs/compliance/README.md`: risk folder, notifications for P5-12, P5-14, P0-14 and control owners.
 - `docs/phase-0-discovery-compliance/README.md`: #12 status.
 
+### ✅ P0-12 Open Dental access and test database (#13)
+| File | What it's for |
+|---|---|
+| [docs/integrations/open-dental-access.md](integrations/open-dental-access.md) | **Main file:** how we connect to Open Dental, permissions to request, fees, rate limits, versions, where keys live, the email draft to Open Dental, test results |
+| [docs/integrations/open-dental-test-data.md](integrations/open-dental-test-data.md) | The fake patients and appointments, and which task tests what |
+| [docs/integrations/open-dental-test-db.md](integrations/open-dental-test-db.md) | Our own test database: design, why it's pending, how to reset it |
+| `infra/dev/open-dental-test-db/seed/` | Seed files: `seed_patients.csv` (32), `seed_appointments.csv` (10), `seed_setup.md` |
+| `scripts/open_dental/smoke_test.py` | Read-only check of the API; prints counts and IDs only |
+| `scripts/open_dental/seed_test_db.py` | Loads the seed into our test database only; refuses anything else |
+| `scripts/open_dental/odapi.py`, `test_open_dental_scripts.py` | Shared helper; 13 offline tests |
+| `.env.example` | Names of the local settings (no values) |
+| `openspec/changes/archive/2026-11-26-p0-12-open-dental-access/` | The task plan (archived; hosted smoke test deferred) |
+
+Also updated by P0-12:
+- `docs/compliance/sources/README.md`: sources D1–D8 (Open Dental API pages).
+- `dental-ai-tasks/DECISIONS.md`: #312 (permissions and limits), #313 (public test database read-only), #314 (what's pending and why).
+- `docs/compliance/vendors.yaml` and the generated `vendor-matrix.md`: Open Dental fee note.
+- `docs/compliance/README.md`: notes for P1-15, P1-16, P1-20, P3-14, P1-06, P0-10/P0-11.
+- `docs/phase-0-discovery-compliance/README.md`: #13 status.
+
 ### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
 | Task | Will create | What it'll be for |
 |---|---|---|
-| P0-12 (#13) | `scripts/open_dental/`, `docs/integrations/open-dental-test-db.md` | Open Dental API keys (in Secret Manager, never in the repo) and the test database |
 | P0-13 (#14) | `docs/adr/0001-gemini-models.md`, `evals/spike/p0-13/` | Which Gemini model versions we use per tier, and the test results |
 | P0-14 (#15) | `docs/architecture/` | Architecture document and patient-data flow diagram |
 | P0-15 (#16) | `docs/messaging/templates.yaml`, `scripts/messaging/` | WhatsApp test number and templates now; SMS sender registration before go-live |
