@@ -1,0 +1,173 @@
+# Allowed Google Cloud APIs for the dental-ai projects (P0-06). Single source of truth:
+# infra/org/main.tf reads this file. Adding an API needs a change here plus a DECISIONS row.
+# Columns: hipaa_covered = on Google's HIPAA supported-services list (yes | no; "no" needs a DECISIONS exception);
+# restrict_supported = can be controlled by gcp.restrictServiceUsage (no = controlled by IAM only);
+# vpcsc_restricted = put in the perimeters' restricted_services (only if VPC-SC supports it).
+schema_version: 1
+checked_on: "2026-11-26"
+sources:
+  hipaa_covered: https://docs.cloud.google.com/docs/security/compliance/hipaa   # section last updated 2026-11-11
+  restrict_supported: https://docs.cloud.google.com/organization-policy/reference/restrict-services-supported-services.md.txt
+  vpcsc_supported: https://docs.cloud.google.com/vpc-service-controls/docs/supported-products
+  assured_workloads_hcls: https://docs.cloud.google.com/assured-workloads/docs/data-boundaries/us-data-boundary-healthcare-life-sciences.md.txt
+
+# dev, staging and prod (the projects that may one day hold PHI; real PHI only in prod, DECISIONS #25)
+services:
+  - api: aiplatform.googleapis.com
+    purpose: Gemini via Vertex AI (P2-03)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Covered-list entries: 'Generative AI on Agent Platform' and 'Gemini Enterprise Agent Platform' (Vertex AI renamed). GA models only; US regional endpoint (P0-13)."
+  - api: speech.googleapis.com
+    purpose: Streaming Speech-to-Text (P3-03)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Data logging must stay off (HIPAA page footnote 29)."
+  - api: texttospeech.googleapis.com
+    purpose: Text-to-Speech (P3)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: ""
+  - api: run.googleapis.com
+    purpose: Cloud Run backend and frontend
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "VPC-SC needs extra Cloud Run setup (P1-02)."
+  - api: sqladmin.googleapis.com
+    purpose: Cloud SQL Postgres (P1-03)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "VPC-SC protects the Admin API only; public IP blocked by sql.restrictPublicIp."
+  - api: redis.googleapis.com
+    purpose: Memorystore for Redis (P1-02)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Covered-list entry: 'Memorystore'. VPC-SC: GA, protect with perimeters = yes (open question answered)."
+  - api: cloudtasks.googleapis.com
+    purpose: Reminder and email jobs
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Check supported targets when building (P1-02)."
+  - api: cloudscheduler.googleapis.com
+    purpose: Scheduled jobs
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: ""
+  - api: secretmanager.googleapis.com
+    purpose: Secrets (P1-05)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Footnote 27: follow the Secret Manager best practices."
+  - api: cloudkms.googleapis.com
+    purpose: Keys, CMEK, field encryption (P1-05)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Covered-list entry: 'Cloud Key Management Service'."
+  - api: storage.googleapis.com
+    purpose: Buckets (exports)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Footnote 10: enable Object Versioning. Google also enables storage-api and storage-component with it (legacy aliases)."
+  - api: artifactregistry.googleapis.com
+    purpose: Container images
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Footnote 4: artifact names are metadata; never put PHI in them."
+  - api: compute.googleapis.com
+    purpose: VPC networks, firewall, Direct VPC egress for Cloud Run (P1-02)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Covered-list entries: 'Virtual Private Cloud (VPC)', 'Compute Engine'."
+  - api: servicenetworking.googleapis.com
+    purpose: Private services access (private IP for Cloud SQL and Memorystore)
+    hipaa_covered: no
+    restrict_supported: no
+    vpcsc_restricted: false
+    notes: "Not a named entry on the covered list; control-plane only (creates VPC peering), never carries PHI. Exception DECISIONS #295. Not supported by restrictServiceUsage or VPC-SC: controlled by IAM only. P1-02 may replace it with Private Service Connect."
+  - api: cloudtrace.googleapis.com
+    purpose: Request tracing (P1-07)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Never put PHI in span names or attributes."
+  - api: identitytoolkit.googleapis.com
+    purpose: Identity Platform, staff login with MFA (admin console)
+    hipaa_covered: yes
+    restrict_supported: no
+    vpcsc_restricted: true
+    notes: "Footnote 22: store only the minimum (staff email). Not supported by restrictServiceUsage: controlled by IAM only."
+
+# Dropped from the spec candidate list
+dropped:
+  - api: vpcaccess.googleapis.com
+    reason: "Serverless VPC Access isn't a named entry on the covered list. P1-02 uses Cloud Run Direct VPC egress (part of run/compute) instead of a connector."
+  - api: generativelanguage.googleapis.com
+    reason: "Gemini Developer API (AI Studio). Never allowed; denied by policy wherever policy is available (plan §3.3)."
+
+# dai-rcpt-ops: never holds PHI (DECISIONS #25), outside every perimeter. Its own short list.
+ops_services:
+  - api: storage.googleapis.com
+    purpose: Terraform state bucket
+    hipaa_covered: yes
+    restrict_supported: yes
+    notes: ""
+  - api: essentialcontacts.googleapis.com
+    purpose: Google notification contacts (P0-05)
+    hipaa_covered: no
+    restrict_supported: no
+    notes: "Admin metadata only. Exception DECISIONS #295."
+  - api: orgpolicy.googleapis.com
+    purpose: Manage org policies (P0-06)
+    hipaa_covered: no
+    restrict_supported: no
+    notes: "Admin metadata only. Exception DECISIONS #295."
+  - api: billingbudgets.googleapis.com
+    purpose: Budget alerts (P0-05 Part B)
+    hipaa_covered: no
+    restrict_supported: no
+    notes: "Billing metadata only. Exception DECISIONS #295."
+  - api: iamcredentials.googleapis.com
+    purpose: CI Workload Identity Federation (P1-06)
+    hipaa_covered: yes
+    restrict_supported: no
+    notes: "Part of 'Identity and Access Management (IAM)'. Controlled by IAM only."
+  - api: sts.googleapis.com
+    purpose: CI Workload Identity Federation (P1-06)
+    hipaa_covered: yes
+    restrict_supported: no
+    notes: "Part of 'Identity and Access Management (IAM)'. Controlled by IAM only."
+
+# Kept enabled because Google requires or always allows them (not controllable by restrictServiceUsage)
+always_on:
+  - logging.googleapis.com
+  - monitoring.googleapis.com
+  - serviceusage.googleapis.com
+  - servicemanagement.googleapis.com
+
+# Legacy aliases Google enables together with an allowed service; kept with it
+aliases:
+  - api: storage-api.googleapis.com
+    with: storage.googleapis.com
+  - api: storage-component.googleapis.com
+    with: storage.googleapis.com
+  - api: sql-component.googleapis.com
+    with: sqladmin.googleapis.com
+
+# Disabled on 2026-11-26 (P0-06 task 3.1) in all four projects: the cloudapis.googleapis.com bundle (it depends on the
+# defaults, so it had to go first) and 13 default APIs not on this list: analyticshub, apptopology, bigquery,
+# bigqueryconnection, bigquerydatapolicy, bigquerydatatransfer, bigquerymigration, bigqueryreservation, bigquerystorage,
+# dataform, dataplex, datastore, telemetry. Known leftover: dai-rcpt-ops still has the defaults cloudtrace and
+# sql-component (not on ops_services; no data, no cost); disable them on the next ops change.
