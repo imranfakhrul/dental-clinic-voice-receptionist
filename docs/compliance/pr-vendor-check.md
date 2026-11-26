@@ -6,7 +6,7 @@ P1-01 copies the checklist below into `.github/pull_request_template.md`. Until 
 ### Vendor and PHI check
 - [ ] This PR adds **no** new external service, SaaS, SDK that sends data out, or Google Cloud API.
       If it does: `docs/compliance/vendors.yaml` (and `infra/org/allowed_services.yaml` for Google APIs) is updated in this PR, and the compliance owner is a reviewer.
-- [ ] This PR sends **no new kind of PHI** to an existing vendor. If it does: the vendor's row and the clinic BAA Annex A (P0-09) are updated.
+- [ ] This PR sends **no new kind of PHI** to an existing vendor and adds no new PHI hop. If it does: the PHI flow table `docs/architecture/phi-flows.md` (P0-14), the vendor's row and the clinic BAA Annex A (P0-09) are updated, and `python3 scripts/compliance/check_phi_flows.py` passes.
 - [ ] No PHI in code, tests, fixtures, logs, screenshots or the PR description (synthetic data only).
 - [ ] No Pre-GA (preview/experimental) model or feature receives PHI.
 ```
@@ -25,6 +25,8 @@ python3 scripts/compliance/check_vendors.py --gate     # GATE OPEN / GATE CLOSED
 /infra/org/allowed_services.yaml      <compliance owner>
 /backend/app/integrations/            <compliance owner> <backend lead>
 /scripts/compliance/                  <compliance owner>
+/docs/architecture/phi-flows.md       <compliance owner>
+/docs/architecture/network.md         <compliance owner> <tech lead>
 ```
 
 Before turning it on:

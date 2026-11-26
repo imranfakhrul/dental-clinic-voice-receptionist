@@ -67,6 +67,7 @@ Notes:
 | `storage.googleapis.com` | Buckets (exports) | yes | 2026-11-26 |
 | `artifactregistry.googleapis.com` | Container images | yes | 2026-11-26 |
 | `compute.googleapis.com` | VPC networks, firewall, Direct VPC egress for Cloud Run (P1-02) | yes | 2026-11-26 |
+| `dns.googleapis.com` | Private DNS zones that send *.googleapis.com to the restricted VIP and name the Private Service Connect endpoint for Vertex AI `us` (P0-14 network map, P1-02) | yes | 2026-11-26 |
 | `servicenetworking.googleapis.com` | Private services access (private IP for Cloud SQL and Memorystore) | no (exception) | 2026-11-26 |
 | `cloudtrace.googleapis.com` | Request tracing (P1-07) | yes | 2026-11-26 |
 | `identitytoolkit.googleapis.com` | Identity Platform, staff login with MFA (admin console) | yes | 2026-11-26 |

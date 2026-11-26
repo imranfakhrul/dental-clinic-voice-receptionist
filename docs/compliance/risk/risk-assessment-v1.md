@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| Version | **v1 draft**, 2026-11-26 (P0-09 inputs, P0-10 vendor matrix) |
+| Version | **v1.1 draft**, 2026-11-26: v1 (P0-09 inputs, P0-10 vendor matrix), then v1.1 after P0-14 (flows replaced by the architecture flow table, risks R39–R42) |
 | Status | Reviewed by the compliance advisor (mock persona, §8). **Not final:** the final assessment and sign-off before go-live is P5-14 |
-| Register | [risk-register.md](risk-register.md): 38 risks. Check: `python3 scripts/compliance/check_risk_register.py` |
+| Register | [risk-register.md](risk-register.md): 42 risks. Check: `python3 scripts/compliance/check_risk_register.py` |
 | Safeguards | [safeguard-coverage.md](safeguard-coverage.md) · Acceptances: [accepted-risks.md](accepted-risks.md) |
 | Sources | [sources/README.md](../sources/README.md#p0-11-risk-assessment-checked-2026-11-26) K1–K6 (eCFR as of 2026-11-24, HHS guidance, Federal Register) |
 
@@ -99,32 +99,34 @@ Owner tasks are survivor IDs (merged IDs in brackets).
 
 Every asset with ePHI (A01–A13, A18) appears in at least one flow and at least one risk. A14–A17 must never hold PHI; the risks that cover that are listed.
 
-## 4. Data flows (v1; replaced by the P0-14 diagram)
-PHI elements refer to [Annex A](../baa/annex-a-data-and-purposes.md) rows A1–A8.
+## 4. Data flows (replaced in v1.1)
+The data flows are now the PHI flow table in [docs/architecture/phi-flows.md](../../architecture/phi-flows.md) (P0-14), the single source of truth. Its §4 maps the v1 flows to the new IDs:
 
-| # | From → To | PHI elements | Protection (planned) | Risks |
-|---|---|---|---|---|
-| F1 | Patient browser → backend | Voice audio, chat text, identifiers (A1, A3, A6) | TLS 1.2+; session token (P1-13, was P1-14) | R02, R15, R25 |
-| F2 | Backend → Vertex AI | Compact context, PHI masked where possible (P2-04) | Private access within the VPC-SC perimeter (not applied yet, R34); Google Cloud BAA | R03, R07, R13, R18 |
-| F3 | Backend → Speech-to-Text / Text-to-Speech | Audio and reply text (A6) | As F2; STT data logging off (P0-06) | R13, R22 |
-| F4 | Backend ↔ Open Dental API | Search identifiers, patient and appointment data (A1, A2) | TLS; keys in Secret Manager (P1-15) | R12, R16, R17, R21, R36 |
-| F5 | Backend → Postgres / Redis | IDs, encrypted fields, callback cases, consent (A1–A4, A8) | CMEK and field encryption (P1-03, P1-05) | R10, R14, R24 |
-| F6 | Backend → Gmail → clinic admin | Link only by default; full details only if approved (A5) | TLS compliance rule (P0-08) | R08, R23 |
-| F7 | Backend → messaging provider → patient | First name, clinic, date, time (A4) | Provider BAA; consent (P4-02); `messaging_policy.yaml` | R09, R19, R35 |
-| F8 | Backend → Cloud Logging | **None allowed** | Redaction (P1-07, was P1-11); scans (P5-08) | R01 |
-| F9 | Staff browser ↔ admin console | Callback cases, activity log | MFA and RBAC (P1-13) | R04, R05 |
+| v1 flow | Now |
+|---|---|
+| F1 | F01 |
+| F2 | F02 |
+| F3 | F03, F04 |
+| F4 | F05, F16 (test data) |
+| F5 | F06, F07, F13, F14 |
+| F6 | F08, F09 |
+| F7 | F10a, F10b, F15a, F15b |
+| F8 | F11 |
+| F9 | F12 |
+
+Risks R01–R38 keep their v1 flow references (F1–F9); R39 onwards use the new IDs. The asset IDs A01–A18 in §3 are unchanged.
 
 ## 5. Results summary
-38 risks: R01–R33 from the task spec, plus R34–R38 found in this review.
+42 risks: R01–R33 from the task spec, R34–R38 found in the v1 review, and R39–R42 found in P0-14 (v1.1).
 
 | Band | Inherent | Residual |
 |---|---|---|
 | Critical (20–25) | 0 | 0 |
-| High (10–16) | 28 | 0 |
-| Medium (5–9) | 10 | 18 |
-| Low (1–4) | 0 | 20 |
+| High (10–16) | 29 | 0 |
+| Medium (5–9) | 13 | 19 |
+| Low (1–4) | 0 | 23 |
 
-By category: C 17 · I 5 · A 5 · S 3 · V 4 · O 4.
+By category: C 20 · I 6 · A 5 · S 3 · V 4 · O 4.
 
 **Top inherent risks:**
 - **R01, score 16:** PHI in logs.
@@ -169,7 +171,7 @@ Decided by Morgan Lead (sponsor, mock), 2026-11-26. Logged in DECISIONS #310, cl
 
 ## 7. Review triggers
 Review and update this assessment when any of these happen:
-- P0-14 lands (replace §4 with the data-flow diagram);
+- ~~P0-14 lands (replace §4 with the data-flow diagram)~~: done in v1.1;
 - the **hosting decision** is made (DECISIONS #302, R37);
 - a vendor or Google API is added or changed (`vendors.yaml`, `allowed_services.yaml`);
 - a PHI data category is added (Annex A change);
@@ -186,6 +188,7 @@ Review and update this assessment when any of these happen:
 | Tech lead (scoring session) | Riley Tech | 2026-11-26 | Scores reviewed; two changes (R13, R17); new risks R34–R38 |
 | Sponsor (gap decisions) | Morgan Lead | 2026-11-26 | G1–G3 → P5-14, G4 → P5-12 |
 | Compliance advisor (review) | Sam Comply | 2026-11-26 | v1 draft reviewed (checks below). **Not the final sign-off** (P5-14) |
+| Tech lead + compliance advisor (v1.1 review after P0-14) | Riley Tech, Sam Comply | 2026-11-26 | §4 replaced by the architecture flow table; R39–R42 added and scored; checker passes |
 
 **Reviewer checks (task spec §10):**
 

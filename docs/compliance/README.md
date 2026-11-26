@@ -3,7 +3,8 @@
 | File | What |
 |---|---|
 | [../adr/0001-gemini-models.md](../adr/0001-gemini-models.md) | **Gemini models ADR** (P0-13): tiers, two backends, data settings. Proposed |
-| [risk/](risk/) | **HIPAA risk assessment v1** (P0-11): [assessment](risk/risk-assessment-v1.md), [register](risk/risk-register.md) (38 risks, check `scripts/compliance/check_risk_register.py`), [safeguard coverage](risk/safeguard-coverage.md), [accepted risks](risk/accepted-risks.md) (none). Draft v1; final at P5-14 |
+| [../architecture/](../architecture/README.md) | **Architecture and PHI flow table** (P0-14): [phi-flows.md](../architecture/phi-flows.md) is the source of truth for PHI hops, check `scripts/compliance/check_phi_flows.py`; ADRs 0002–0006 in [../adr/](../adr/README.md) |
+| [risk/](risk/) | **HIPAA risk assessment v1.1** (P0-11, flows updated by P0-14): [assessment](risk/risk-assessment-v1.md), [register](risk/risk-register.md) (42 risks, check `scripts/compliance/check_risk_register.py`), [safeguard coverage](risk/safeguard-coverage.md), [accepted risks](risk/accepted-risks.md) (none). Draft v1; final at P5-14 |
 | [vendor-matrix.md](vendor-matrix.md) | **Vendor/BAA matrix and PHI gate** (P0-10), generated from [vendors.yaml](vendors.yaml) (schema [vendors.schema.json](vendors.schema.json)). Gate today: **CLOSED** |
 | [pr-vendor-check.md](pr-vendor-check.md) | PR checklist text for P1-01, and the proposed CODEOWNERS entries (not active) |
 | [baa-google-cloud.md](baa-google-cloud.md) | Google Cloud HIPAA BAA record. Status **NOT ACCEPTED**. Includes the covered-products snapshot (2026-11-26). P0-10 imports it into the vendor matrix. |
@@ -120,6 +121,16 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P3-01 / P3-14 Voice latency (from P0-13) | Vertex `us` TTFT not measured yet (no billing); Developer API numbers are indicative only; `gemini-3.8-live` noted as the Live API option (DECISIONS #69) | - |
 | P5-01 Eval harness (from P0-13) | Reuse the three spike sets as a starting suite; model-change procedure in `docs/runbooks/gemini-model-lifecycle.md` | - |
 | P0-10 / P0-11 / P0-14 (from P0-13) | Vendor row `google-ai-studio` (`phi: no`, local only, DECISIONS #316). R13: `cacheConfig` EPHEMERAL pending and abuse-monitoring question open, so R13 stays a planned control. Data-flow F2: `us` multi-region endpoint, no grounding, no request-response logging | - |
+| P1-01 Monorepo (from P0-14) | ADR 0006 conventions; module responsibilities in `docs/architecture/containers.md` §3; add `check_phi_flows.py` to CI with the other compliance checks; app-level outbound host allow-list (R42) | - |
+| P1-02 Terraform base (from P0-14) | `docs/architecture/network.md`: LB + Cloud Armor, ingress "Internal and Cloud Load Balancing", Direct VPC egress + Cloud NAT static IPs, restricted VIP DNS, **PSC endpoint for `aiplatform.us.rep.googleapis.com`**, Gmail via NAT, `dns.googleapis.com` now allowed (DECISIONS #319); open questions Q1–Q5; Cloud Run settings in ADR 0002; Memorystore TLS + AUTH, CMEK only at creation | - |
+| P1-03 Cloud SQL (from P0-14) | ADR 0005: Postgres 16, CMEK, private IP via PSC, no public IP, IAM DB auth, HA in prod, 30 backups + PITR in the US | - |
+| P1-06 CI/CD (from P0-14) | Two Cloud Run services (`web`, `api`); deploy from `ops` with a perimeter ingress rule; Cloud Run continuous deployment isn't available inside a perimeter (sources A9) | - |
+| P2-01 State machine and slot memory (from P0-14) | Save state after every turn so a reconnect (60-minute WebSocket limit, instance loss) loses nothing (sequences S1b, R39) | - |
+| P2-03 LLM provider (from P0-14) | Flow F02 rules; the only Gemini path; fail startup if `GOOGLE_API_KEY` is set outside `APP_ENV=local`; never Pipecat's LLM services (ADR 0003, R40) | - |
+| P3-01 / P3-02 Voice (from P0-14) | Confirm ADR 0003 (Pipecat only for transport/VAD/STT/TTS, explicit US `location`) and ADR 0004 (WebSocket, 16 kHz PCM, 20 ms); implement reconnect with session token | - |
+| P4-01 / P4-04 Messaging and reminders (from P0-14) | F10a/F10b content limits; webhook signature checks, no payload in logs (F15a/F15b, R41); task payloads carry IDs only and handlers re-fetch (F13) | - |
+| P0-09 Clinic BAA (from P0-14) | Annex A must match `phi-flows.md`: add inbound status and replies to A4; clarify Annex B B1 "logging" (F11 allows no PHI) | - |
+| P0-10 Vendor matrix (from P0-14) | Flow rows use vendor ids `google-cloud`, `google-workspace`, `meta-whatsapp`, `twilio`, `open-dental`, `google-ai-studio`; rule R-F blocks any flow to an unlisted vendor | - |
 | P5-14 HIPAA readiness (from P0-10) | `vendor-matrix.md` and the `--gate` output as evidence | - |
 | P0-05, P0-07, P0-08, P0-09 (from P0-10) | When a record turns ACCEPTED/SIGNED, set that row (or clinic) to `signed` with date and record, and re-render | - |
 | P0-13 Gemini model choice | Covered entries "Generative AI on Agent Platform" and "Gemini Enterprise Agent Platform" (Vertex AI renamed); GA models only | ✅ used in P0-13 (ADR 0001) |

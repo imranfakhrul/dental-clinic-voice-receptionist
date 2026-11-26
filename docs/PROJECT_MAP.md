@@ -50,6 +50,7 @@ Current main specs:
 | [risk-assessment](../openspec/specs/risk-assessment/spec.md) | P0-11 |
 | [open-dental-access](../openspec/specs/open-dental-access/spec.md) | P0-12 |
 | [gemini-models](../openspec/specs/gemini-models/spec.md) | P0-13 |
+| [architecture-phi-flows](../openspec/specs/architecture-phi-flows/spec.md) | P0-14 |
 
 ---
 
@@ -197,7 +198,7 @@ Also updated by P0-10:
 | File | What it's for |
 |---|---|
 | [docs/compliance/risk/risk-assessment-v1.md](compliance/risk/risk-assessment-v1.md) | **Main file:** scope, scoring method, where patient data lives and flows, results, gap decisions, review triggers, sign-off |
-| [docs/compliance/risk/risk-register.md](compliance/risk/risk-register.md) | The 38 risks: what can go wrong, how bad, which task prevents it |
+| [docs/compliance/risk/risk-register.md](compliance/risk/risk-register.md) | The 42 risks (R39–R42 added by P0-14): what can go wrong, how bad, which task prevents it |
 | [docs/compliance/risk/safeguard-coverage.md](compliance/risk/safeguard-coverage.md) | Every HIPAA Security Rule standard → risks and controls |
 | [docs/compliance/risk/accepted-risks.md](compliance/risk/accepted-risks.md) | Rules for accepting a risk (none accepted) |
 | `scripts/compliance/check_risk_register.py` | Checks task IDs exist and aren't merged, score math, High risks covered, every PHI vendor named |
@@ -246,10 +247,29 @@ Also updated by P0-13:
 - `docs/compliance/README.md`: notes for P2-03, P2-05, P3-01/P3-14, P5-01, P0-10/P0-11/P0-14.
 - `docs/phase-0-discovery-compliance/README.md`: #14 status.
 
+### ✅ P0-14 Architecture and PHI data flows (#15)
+| File | What it's for |
+|---|---|
+| [docs/architecture/README.md](architecture/README.md) | Start here: reading order, local / cloud views, what changes if hosting isn't Google Cloud |
+| [docs/architecture/phi-flows.md](architecture/phi-flows.md) | **Main file:** every place patient data may go, which fields, which vendor, which BAA (F01–F17) |
+| [docs/architecture/context.md](architecture/context.md), [containers.md](architecture/containers.md) | Big picture; what runs where; which code module owns what; Google services used |
+| [docs/architecture/network.md](architecture/network.md) | Network map and open questions for P1-02 |
+| [docs/architecture/sequences.md](architecture/sequences.md) | Voice turn (with reconnect), booking, callback, reminder diagrams |
+| [docs/adr/](adr/README.md) | Decision records 0001–0006 and the template |
+| `scripts/compliance/check_phi_flows.py` | Checks the flow table against the slot list, vendors and allowed services (13 tests) |
+| `openspec/changes/archive/2026-11-26-p0-14-architecture-phi-flows/` | The task plan (archived) |
+
+Also updated by P0-14:
+- `docs/compliance/risk/`: assessment v1.1 (flows now point to `phi-flows.md`), risks R39–R42.
+- `docs/compliance/pr-vendor-check.md`: flow-table checklist item; proposed CODEOWNERS for the architecture files.
+- `infra/org/allowed_services.yaml` and `vendor-matrix.md`: Cloud DNS added.
+- `docs/compliance/sources/README.md`: sources A1–A22.
+- `dental-ai-tasks/DECISIONS.md`: #318–#321.
+- `docs/compliance/README.md`: hand-off notes for P1-01, P1-02, P1-03, P1-06, P2-01, P2-03, P3-01/P3-02, P4-01/P4-04, P0-09, P0-10.
+
 ### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
 | Task | Will create | What it'll be for |
 |---|---|---|
-| P0-14 (#15) | `docs/architecture/` | Architecture document and patient-data flow diagram |
 | P0-15 (#16) | `docs/messaging/templates.yaml`, `scripts/messaging/` | WhatsApp test number and templates now; SMS sender registration before go-live |
 
 ---

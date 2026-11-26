@@ -91,6 +91,12 @@ services:
     restrict_supported: yes
     vpcsc_restricted: true
     notes: "Covered-list entries: 'Virtual Private Cloud (VPC)', 'Compute Engine'."
+  - api: dns.googleapis.com
+    purpose: Private DNS zones that send *.googleapis.com to the restricted VIP and name the Private Service Connect endpoint for Vertex AI `us` (P0-14 network map, P1-02)
+    hipaa_covered: yes
+    restrict_supported: yes
+    vpcsc_restricted: true
+    notes: "Covered-list entry: 'Cloud DNS'. VPC-SC: GA, reachable through the restricted VIP; public zones can't be created inside a perimeter (keep public DNS outside prod). Added by P0-14, DECISIONS #319."
   - api: servicenetworking.googleapis.com
     purpose: Private services access (private IP for Cloud SQL and Memorystore)
     hipaa_covered: no

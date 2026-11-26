@@ -46,7 +46,7 @@ Status values: ✅ done · 🟡 in progress · ⬜ not started.
 |---|---|---|---|---|---|
 | #13 | P0-12 Open Dental API keys + test database | S | #1 | `scripts/open_dental/`, `docs/integrations/open-dental-test-db.md` | ✅ permissions refined, email drafted, seed ready; developer key, test DB (B) and hosted smoke test pending |
 | #14 | P0-13 GA Gemini model versions per tier | S | #6 | `docs/adr/0001-gemini-models.md`, `evals/spike/p0-13/` | ✅ tiers confirmed (ADR Proposed), two backends, spike set and runner ready; live run deferred, Vertex run and `cacheConfig` pending |
-| #15 | P0-14 Architecture doc + PHI data-flow diagram | M | #4, #14 | `docs/architecture/` | ⬜ |
+| #15 | P0-14 Architecture doc + PHI data-flow diagram | M | #4, #14 | `docs/architecture/` | ✅ architecture docs, PHI flow table F01–F17 with checker, ADRs 0002–0006 (0003 Proposed; 0002/0005 conditional on Google Cloud), P0-11 v1.1 |
 | #16 | P0-15 Messaging sender registration + templates | M | #8, #7, #1 | `docs/messaging/templates.yaml`, `scripts/messaging/` | ⬜ |
 
 ## Order of work
