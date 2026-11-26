@@ -4,6 +4,8 @@
 |---|---|
 | [baa-google-cloud.md](baa-google-cloud.md) | Google Cloud HIPAA BAA record. Status **NOT ACCEPTED**. Includes the covered-products snapshot (2026-11-26). P0-10 imports it into the vendor matrix. |
 | [bootstrap-checks-2026-11-26.md](bootstrap-checks-2026-11-26.md) | Output of the Google Cloud setup checks (P0-05) |
+| [baa-google-workspace.md](baa-google-workspace.md) | Google Workspace BAA record (P0-08): **NOT ACCEPTED**; no domain or Workspace until production |
+| [email-readiness-example-dental.md](email-readiness-example-dental.md) | Callback email readiness for our clinic (P0-08): **not ready**, placeholder address |
 | [baa-meta-whatsapp.md](baa-meta-whatsapp.md) | Meta (WhatsApp Cloud API) BAA record (P0-07): **NOT ACCEPTED**; Meta's terms say it isn't a business associate; written request drafted |
 | [baa-twilio.md](baa-twilio.md) | Twilio (Programmable SMS) BAA record (P0-07): **NOT ACCEPTED**; needs Security/Enterprise Edition; written request drafted |
 | [patient-messaging-decision.md](patient-messaging-decision.md) | Patient messaging decision (P0-07a): **WhatsApp now** (testing, synthetic data); **at go-live each clinic chooses SMS or WhatsApp**, WhatsApp with real details only after a signed Meta BAA (else SMS); sources, advisor answers, signatures |
@@ -36,6 +38,7 @@ Every item must be done before any real PHI enters `dai-rcpt-prod` (dev, staging
 | Speech-to-Text data logging confirmed off with a screenshot | API not enabled yet (so it can't be on) | P3-03 |
 | Clinic ↔ company BAA | Not signed | P0-09 |
 | Messaging BAA for the clinic's chosen channel: Twilio for SMS ([baa-twilio.md](baa-twilio.md)), Meta for WhatsApp ([baa-meta-whatsapp.md](baa-meta-whatsapp.md)) | Both NOT ACCEPTED; requests drafted, not sent; Meta's terms currently say it isn't a business associate | P0-07 (DECISIONS #299–#301) |
+| Callback email: company domain, Google Workspace and its BAA ([baa-google-workspace.md](baa-google-workspace.md)), `callbacks@` lock-down, SPF/DKIM/DMARC, TLS rule per clinic, readiness with the clinic's real domain | Bought for production; Workspace BAA NOT ACCEPTED | P0-08 (DECISIONS #303, #304) |
 | Vendor matrix lists every PHI vendor with a signed BAA | Not built | P0-10 |
 
 ## Pending notifications
@@ -47,6 +50,11 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P0-15 Sender registration (from P0-07a) | WhatsApp test number and templates now; SMS sender (10DLC or toll-free verification) before go-live; templates may use only the fields in `messaging_policy.yaml` | - |
 | P0-15 Sender registration (from P0-07) | Meta Cloud API test number now; production WhatsApp and Twilio SMS registration steps in `docs/integrations/messaging-provider.md` §8 | - |
 | P0-10 Vendor matrix (from P0-07) | Rows for Meta and Twilio from `baa-meta-whatsapp.md` and `baa-twilio.md` (both NOT ACCEPTED); the test tunnel noted as test-only, no PHI | - |
+| P0-10 Vendor matrix (from P0-08) | Row for Google Workspace (Gmail) from `baa-google-workspace.md` (NOT ACCEPTED); Mailpit is a local dev tool, not a vendor | - |
+| P2-23 Admin email sender (from P0-08) | Templates in `docs/integrations/admin-email/templates/`, config keys and load-time rules, keyless DWD design (`gmail.send`, `signJwt`), limits, logging rules, Mailpit for local dev (`docs/integrations/admin-email.md`) | - |
+| P2-22 Callback cases (from P0-08) | `case_id` must be a random opaque ID (it appears in emails and links) | - |
+| P4-13 / P4-14 (from P0-08) | Config keys `callback.*` and their rules; link format `/cases/{case_id}`; unsent-email alerts | - |
+| P0-06 / P1-05 (from P0-08) | APIs `gmail.googleapis.com`, `iamcredentials.googleapis.com`; service account `admin-email-sender` in a dedicated project, key creation blocked | - |
 | P4-01 / P4-06 / P4-07 (from P0-07) | Integration facts in `messaging-provider.md` §7: Graph API v27.0, `X-Hub-Signature-256`, status values, no WhatsApp STOP keyword handling (P4-07 must detect it), Twilio `X-Twilio-Signature` via SDK validator; **P4-06 runs the deferred live webhook test** | - |
 | P1-05 Secrets (from P0-07) | Create `whatsapp-access-token`, `whatsapp-app-secret`, `whatsapp-webhook-verify-token`; later `twilio-account-sid`, `twilio-auth-token`, `twilio-messaging-service-sid` | - |
 | P0-09 Clinic ↔ company BAA (from P0-07a) | Must mention subcontractors under their own BAAs, including the messaging vendors of the clinic's chosen channel: the SMS provider, or Meta and the WhatsApp provider (advisor answer 5, DECISIONS #299) | - |

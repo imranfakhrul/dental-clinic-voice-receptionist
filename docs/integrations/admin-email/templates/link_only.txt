@@ -1,0 +1,12 @@
+Subject: [ACTION NEEDED] Patient callback request – {urgency} – Case {case_id}
+
+A patient needs a callback from your team.
+
+Urgency:   {urgency}
+Received:  {received_at}
+Case ID:   {case_id}
+
+Open the case (login required): {admin_console_base_url}/cases/{case_id}
+
+This email intentionally contains no patient details.
+This mailbox is not monitored. Do not reply.

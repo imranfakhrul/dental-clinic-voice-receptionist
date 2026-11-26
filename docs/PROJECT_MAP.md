@@ -44,6 +44,7 @@ Current main specs:
 | [hipaa-guardrails](../openspec/specs/hipaa-guardrails/spec.md) | P0-06 |
 | [patient-messaging-policy](../openspec/specs/patient-messaging-policy/spec.md) | P0-07a |
 | [messaging-provider](../openspec/specs/messaging-provider/spec.md) | P0-07 |
+| [admin-callback-email](../openspec/specs/admin-callback-email/spec.md) | P0-08 |
 
 ---
 
@@ -134,10 +135,29 @@ Also updated by P0-07:
 - `docs/compliance/README.md`: lists the two BAA records, what's pending before real PHI, and notes for P0-10, P0-15, P4-01/06/07 and P1-05.
 - `docs/phase-0-discovery-compliance/README.md`: #8 status.
 
+### ✅ P0-08 Admin callback email (#9)
+| File | What it's for |
+|---|---|
+| [docs/integrations/admin-email.md](integrations/admin-email.md) | **Main file:** how callback emails reach the clinic admin: route, sender, security, config keys, login design, tests, what's pending |
+| `docs/integrations/admin-email/templates/link_only.txt` | The default email: urgency, case ID and link only, no patient data |
+| `docs/integrations/admin-email/templates/full_details.txt` | The email with patient details (only with the advisor's written approval) |
+| [docs/compliance/baa-google-workspace.md](compliance/baa-google-workspace.md) | Google Workspace BAA record (paper, NOT ACCEPTED) and how to accept it |
+| [docs/compliance/email-readiness-example-dental.md](compliance/email-readiness-example-dental.md) | Readiness check for our clinic's mailbox (not ready: placeholder address) |
+| [docs/runbooks/admin-email-add-clinic.md](runbooks/admin-email-add-clinic.md) | Steps to add a new clinic to callback email |
+| `scripts/email/check_templates.py` | Checks the templates contain no patient fields where they mustn't |
+| `scripts/email/send_test_callback_email.py` | Sends a fake callback email to Mailpit (local) or through Gmail (`--smtp gmail`) and checks it |
+| `scripts/email/docker-compose.mailpit.yml` | Starts Mailpit, a local fake mailbox (http://127.0.0.1:8025) |
+| `openspec/changes/archive/2026-11-26-p0-08-admin-email-route/` | The task plan (archived) |
+
+Also updated by P0-08:
+- `docs/compliance/sources/README.md`: sources E1–E15 (Google Workspace, Gmail, delegation, app passwords, Mailpit).
+- `dental-ai-tasks/DECISIONS.md`: #303 (link-only default, config keys, keyless login design), #304 (no domain until production, paper BAA, tests used instead).
+- `docs/compliance/README.md`: lists the new files, what's pending before real PHI, and notes for P2-23, P2-22, P4-13/14, P0-06/P1-05 and P0-10.
+- `docs/phase-0-discovery-compliance/README.md`: #9 status.
+
 ### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
 | Task | Will create | What it'll be for |
 |---|---|---|
-| P0-08 (#9) | `docs/integrations/admin-email.md` | How callback emails reach the clinic admin, and that BAA |
 | P0-09 (#10) | `docs/compliance/baa/` | The BAA between the clinic and the company |
 | P0-10 (#11) | `docs/compliance/vendors.yaml`, `scripts/compliance/` | Every vendor that may touch patient data, and its BAA status |
 | P0-11 (#12) | `docs/compliance/risk/` | HIPAA risk assessment v1 |

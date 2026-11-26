@@ -1,0 +1,13 @@
+# Local mail catcher for callback-email tests (P0-08). Nothing leaves this computer.
+# Start:  docker compose -f scripts/email/docker-compose.mailpit.yml up -d
+# Inbox:  http://127.0.0.1:8025      Stop: docker compose -f scripts/email/docker-compose.mailpit.yml down
+# Synthetic data only. P1-01 moves this into the main docker-compose.yml.
+services:
+  mailpit:
+    # v1.34.0, pinned by digest (tested 2026-11-26)
+    image: axllent/mailpit:v1.34.0@sha256:23a2ef85bc50853ab3093645d1d64679afd8887e89da5e48a88940c172591a4e
+    container_name: dai-rcpt-mailpit
+    ports:
+      - "127.0.0.1:1025:1025"   # SMTP
+      - "127.0.0.1:8025:8025"   # web inbox and API
+    restart: "no"

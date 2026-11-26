@@ -1,0 +1,22 @@
+Subject: [ACTION NEEDED] Patient callback request – {urgency} – Case {case_id}
+
+A patient needs a callback from your team.
+
+Urgency:          {urgency}
+Received:         {received_at}
+Case ID:          {case_id}
+
+Patient name:     {patient_name}
+Phone:            {phone}
+WhatsApp:         {whatsapp_number}
+Patient type:     {patient_type} (PatNum {pat_num})
+Date of birth:    {dob}
+Email:            {email}
+Reason category:  {reason_category}
+Situation:        {situation}
+Preferred time:   {preferred_time}
+
+Open the case (login required): {admin_console_base_url}/cases/{case_id}
+
+Sent in full-details mode under approval {full_details_approval}.
+This mailbox is not monitored. Do not reply.
