@@ -46,12 +46,22 @@ Durations are in minutes. The Open Dental time increment is **10 minutes**. **Ve
 | 2 | Recall | 60 |
 | 3 | Child Recall | 40 |
 | 4 | Limited Exam | 30 |
+| 5 | Filling | 60 |
+| 6 | Crown Prep | 90 |
+| 7 | Crown Seat | 30 |
+| 8 | Extraction | 60 |
+| 9 | Perio Maintenance | 60 |
+| 10 | Scaling and Root Planing | 90 |
+| 11 | Denture Adjustment | 30 |
+| 12 | Whitening Consult | 30 |
+| 13 | Post-op Check | 20 |
 
 | ProvNum | Abbreviation | Name | Role | Active |
 |---|---|---|---|---|
 | 1 | DDS1 | Dr. Casey Example | dentist | yes |
-| 2 | HYG1 | Hygienist 1 | hygienist | yes |
-| 3 | HYG2 | Hygienist 2 | hygienist | yes |
+| 2 | HYG1 | Jamie Sample, RDH | hygienist | yes |
+| 3 | HYG2 | Taylor Example, RDH | hygienist | yes |
+| 4 | DDS2 | Dr. Morgan Former | dentist | no |
 
 | OperatoryNum | Name | Hygiene |
 |---|---|---|
