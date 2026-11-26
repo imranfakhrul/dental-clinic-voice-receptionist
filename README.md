@@ -18,6 +18,8 @@ It runs on Google Cloud (Gemini on Vertex AI, Speech-to-Text, Text-to-Speech, Cl
 | [docs/phase-0-discovery-compliance/](docs/phase-0-discovery-compliance/README.md) | Phase 0 overview: goal, all 16 tasks with issue numbers, status and order of work |
 | [docs/discovery/clinic-decision-log.md](docs/discovery/clinic-decision-log.md) | Clinic decisions from the discovery workshop (P0-01) |
 | [docs/flows/overview.md](docs/flows/overview.md) | Conversation flows: the state machine every chat and call follows, 8 flow diagrams, PHI list (P0-04) |
+| [docs/compliance/](docs/compliance/README.md) | Compliance records: Google Cloud BAA status (**not accepted**), covered-products snapshot, pending items before real PHI (P0-05) |
+| [docs/runbooks/](docs/runbooks/gcp-bootstrap.md) | Runbooks: Google Cloud bootstrap (P0-05) |
 
 ## Branches
 | Branch | Purpose |

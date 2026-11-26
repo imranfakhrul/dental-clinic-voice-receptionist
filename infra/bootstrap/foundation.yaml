@@ -1,0 +1,37 @@
+# Google Cloud foundation IDs (P0-05). IDs are identifiers, not secrets. The repo is public, so:
+# no personal email addresses, and the billing account ID is masked (DECISIONS #293).
+# Readable runbook: docs/runbooks/gcp-bootstrap.md. P1-02 imports these projects (terraform import); it never recreates them.
+schema_version: 1
+recorded_on: "2026-11-26"
+account_type: personal          # personal Google account: no organization resource (DECISIONS #293)
+org:                            # pending: needs a company domain (Workspace or Cloud Identity)
+  domain: null
+  org_id: null
+billing:
+  billing_account_id: null      # pending: no billing account yet (record as XXXXXX-XXXXXX-<last 6> when linked)
+  budget_monthly_usd: 50        # budget created once a billing account exists
+folder:                         # pending: folders need an organization
+  name: dental-ai
+  folder_id: null
+projects:
+  dev: {project_id: dai-rcpt-dev, project_number: "583464999786"}
+  staging: {project_id: dai-rcpt-staging, project_number: "445637737319"}
+  prod: {project_id: dai-rcpt-prod, project_number: "763436157077"}
+  ops: {project_id: dai-rcpt-ops, project_number: "428568892795"}
+labels: {system: dental-ai, env: "<env>"}
+terraform_state_bucket: dai-rcpt-ops-tfstate   # pending: not created yet (needs billing)
+groups:                         # pending: Google groups need an organization
+  org_admins: null
+  billing_admins: null
+  security_admins: null
+  developers: null
+essential_contacts:
+  level: project                # org-level once an organization exists
+  categories: [security, technical, billing, legal, suspension]
+  contact: account owner        # email intentionally not recorded (public repo)
+enabled_apis_added_by_us:
+  dai-rcpt-ops: [essentialcontacts.googleapis.com]
+baa:
+  record: docs/compliance/baa-google-cloud.md
+  status: NOT_ACCEPTED
+  accepted_on: null

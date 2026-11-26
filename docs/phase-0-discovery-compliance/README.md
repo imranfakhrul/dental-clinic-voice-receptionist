@@ -32,7 +32,7 @@ Status values: ✅ done · 🟡 in progress · ⬜ not started.
 ### E0.2 Compliance foundation
 | Issue | Task | Size | Depends on | Main output | Status |
 |---|---|---|---|---|---|
-| #5 | P0-05 Google Cloud org/project + Google Cloud BAA | S | - | `docs/compliance/baa-google-cloud.md`, `infra/bootstrap/` | ⬜ |
+| #5 | P0-05 Google Cloud org/project + Google Cloud BAA | S | - | `docs/compliance/baa-google-cloud.md`, `infra/bootstrap/` | ✅ synthetic setup; billing, BAA and organization pending |
 | #6 | P0-06 Restrict projects to HIPAA covered products | M | #5 | `infra/org/`, `docs/compliance/hipaa-controls.md` | ⬜ |
 | #7 | P0-07a Patient messaging channel decision (memo) | S | - | `docs/compliance/patient-messaging-decision.md` | ⬜ |
 | #8 | P0-07 Messaging provider that signs a BAA | S | #7 | `docs/integrations/messaging-provider.md` | ⬜ |
