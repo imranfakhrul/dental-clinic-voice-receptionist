@@ -24,7 +24,7 @@
 
 ## 4. Finish
 
-- [ ] 4.1 Commit with a one-line descriptive message, ask the user before pushing `feature/phase-0-discovery-compliance`, and after the push close issue #2 with a comment listing the files. Verify: `git log -1 --format=%s` is one line, and #2 shows as closed under #17.
+- [x] 4.1 Commit with a one-line descriptive message, ask the user before pushing `feature/phase-0-discovery-compliance`, and after the push close issue #2 with a comment listing the files. Verify: `git log -1 --format=%s` is one line, and #2 shows as closed under #17.
 
 ## Workflow follow-up
 
