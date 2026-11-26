@@ -2,6 +2,7 @@
 
 | File | What |
 |---|---|
+| [risk/](risk/) | **HIPAA risk assessment v1** (P0-11): [assessment](risk/risk-assessment-v1.md), [register](risk/risk-register.md) (38 risks, check `scripts/compliance/check_risk_register.py`), [safeguard coverage](risk/safeguard-coverage.md), [accepted risks](risk/accepted-risks.md) (none). Draft v1; final at P5-14 |
 | [vendor-matrix.md](vendor-matrix.md) | **Vendor/BAA matrix and PHI gate** (P0-10), generated from [vendors.yaml](vendors.yaml) (schema [vendors.schema.json](vendors.schema.json)). Gate today: **CLOSED** |
 | [pr-vendor-check.md](pr-vendor-check.md) | PR checklist text for P1-01, and the proposed CODEOWNERS entries (not active) |
 | [baa-google-cloud.md](baa-google-cloud.md) | Google Cloud HIPAA BAA record. Status **NOT ACCEPTED**. Includes the covered-products snapshot (2026-11-26). P0-10 imports it into the vendor matrix. |
@@ -86,7 +87,7 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P1-05 Secrets (from P0-07) | Create `whatsapp-access-token`, `whatsapp-app-secret`, `whatsapp-webhook-verify-token`; later `twilio-account-sid`, `twilio-auth-token`, `twilio-messaging-service-sid` | - |
 | P0-09 Clinic ↔ company BAA (from P0-07a) | Must mention subcontractors under their own BAAs, including the messaging vendors of the clinic's chosen channel: the SMS provider, or Meta and the WhatsApp provider (advisor answer 5, DECISIONS #299) | - |
 | P0-10 Vendor matrix (from P0-09) | Import Annex B (`baa/annex-b-subcontractors.md`) and the clinic BAA record (NOT SIGNED); the 30-day subcontractor notice (C8) is part of the matrix change process | ✅ done in P0-10 (`vendors.yaml`) |
-| P0-11 Risk assessment (from P0-09) | Annex A as the data inventory; commitments C1–C22 as controls; open questions: outside-US access, Open Dental relay | - |
+| P0-11 Risk assessment (from P0-09) | Annex A as the data inventory; commitments C1–C22 as controls; open questions: outside-US access, Open Dental relay | ✅ used in P0-11 (`risk/`) |
 | P0-12 Open Dental keys (from P0-09) | **The clinic's production key may not be requested until the clinic BAA record says SIGNED**; test database only | - |
 | P1-07 Audit log (from P0-09, spec named P1-12) | Audit retention 6 years (C20); audit entries must support the accounting-of-disclosures information (C10) | - |
 | P5-12 Incident response and retention (from P0-09) | Breach notice ≤ 5 business days (C4); check a same-day heads-up for v2; access/amendment requests forwarded in 5 business days, accounting info in 10 (C9, C10); return/destroy in 30 days with certificate (C13) | - |
@@ -100,7 +101,11 @@ These GitHub issues aren't closed yet or don't have this information. When each 
 | P1-07 Monitoring (from P0-06) | Alert on VPC-SC dry-run violations and org-policy changes once they exist | - |
 | P3-03 Speech-to-Text (from P0-06) | Re-check data logging (screenshot) when the API is enabled; code must never enable it | - |
 | P0-10 Vendor/BAA matrix | `baa-google-cloud.md` as the Google Cloud row: **NOT ACCEPTED**; `hipaa-controls.md` as guardrail evidence; the SMS provider from P0-07a/P0-07 | ✅ done in P0-10 (`vendors.yaml`) |
-| P0-11 Risk assessment (from P0-10) | `vendors.yaml` / `vendor-matrix.md`: vendor list with PHI flags and environments as the third-party input; gate CLOSED today | - |
+| P0-11 Risk assessment (from P0-10) | `vendors.yaml` / `vendor-matrix.md`: vendor list with PHI flags and environments as the third-party input; gate CLOSED today | ✅ used in P0-11 (`risk/`) |
+| P5-12 Incident response (from P0-11) | Scenarios R01–R38 from `risk/risk-register.md`, especially R31 (late breach), R21–R24 (outages, data loss) and the C risks; gap G4 contingency plan is yours (DECISIONS #310) | - |
+| P5-14 HIPAA readiness (from P0-11) | Finalize the register and sign-off; gaps G1–G3 (policies, training, sanctions, access reviews, device policy) are yours; confirm G4 with the advisor; R29 legal review still pending; re-check the Security Rule NPRM status | - |
+| P0-14 Architecture (from P0-11) | Replace the flow table F1–F9 and asset inventory A01–A18 (`risk/risk-assessment-v1.md` §3–§4) with the data-flow diagram, then trigger a review | - |
+| High-risk control owners (from P0-11) | Reference your risk IDs in your spec and tests: P1-07 (R01, R20, R31), P2-12 (R02, R16), P2-04 and P2-08 (R03, R18, R27), P1-13 and P4-09 (R04, R05), P1-05 (R06, R10, R12), P0-13 (R07, R13), P2-22 (R08, R23), P2-25 (R15, R25), P2-20 (R26, R28), P1-02 (R34, R37), P0-12 (R12, R36) | - |
 | P1-01 Monorepo (from P0-10) | Copy the checklist in `pr-vendor-check.md` into `.github/pull_request_template.md`; CODEOWNERS entries there are proposed, add the file only when the user decides (DECISIONS #308). No GitHub issue yet | - |
 | P1-06 CI/CD (from P0-10) | Run `check_vendors.py` and `pytest scripts/compliance/` on every PR; `check_vendors.py --gate` must print GATE OPEN before the first prod deploy with real PHI. No GitHub issue yet | - |
 | P5-14 HIPAA readiness (from P0-10) | `vendor-matrix.md` and the `--gate` output as evidence | - |

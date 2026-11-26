@@ -14,7 +14,7 @@
 | Authority confirmed by | - |
 | Scope | Workspace services on Google's list, including **Gmail** (E2). Third-party add-ons aren't covered. |
 | Saved copy | - (decide before accepting whether the PDF goes in the repo or a private drive; the repo is public) |
-| Legal review of terms | Pending (compliance advisor), P0-11 |
+| Legal review of terms | **Pending** (checked 2026-11-26 in P0-11): no BAA text accepted yet and no counsel engaged. Tracked as risk R29 ([risk register](risk/risk-register.md)); record "done YYYY-MM-DD by <name>" here when counsel has reviewed the accepted text. |
 | Used for | Callback emails to clinic admins, from `callbacks@<company domain>` ([admin-email.md](../integrations/admin-email.md)) |
 
 ## How to accept (when the company decides to)

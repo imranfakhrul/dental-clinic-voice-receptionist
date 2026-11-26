@@ -13,7 +13,7 @@
 | Authority confirmed by | - |
 | Scope | The products on Twilio's HIPAA Eligible Products and Services list at signing |
 | Saved copy | - (decide before signing whether the PDF goes in the repo or a private drive; the repo is public) |
-| Legal review of terms | Pending (compliance advisor), P0-11 |
+| Legal review of terms | **Pending** (checked 2026-11-26 in P0-11): no BAA text accepted yet and no counsel engaged. Tracked as risk R29 ([risk register](risk/risk-register.md)); record "done YYYY-MM-DD by <name>" here when counsel has reviewed the accepted text. |
 | Covered products relied on | **Programmable SMS** (Programmable SMS Basics, Long Codes, Toll-free, Advanced Opt-out), from the [HIPAA Eligible Services list](https://twil.io/HIPAA-eligible-products-and-services), last updated 2026-06-30 (P2, SHA-256 `c287de06…1b38`). The signed BAA must name or incorporate this list. WhatsApp through Twilio is **not** on it. |
 | Edition/plan required for BAA | **Security Edition or Enterprise Edition** (P1). Price only from sales (T5). |
 | Channels allowed by P0-07a | SMS: production channel for clinics that choose it, and fallback for WhatsApp clinics (`allowed_with_phi: true` once this record says ACCEPTED). `messaging_policy.yaml` decision_version 1.2 |

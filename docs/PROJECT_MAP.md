@@ -47,6 +47,7 @@ Current main specs:
 | [admin-callback-email](../openspec/specs/admin-callback-email/spec.md) | P0-08 |
 | [clinic-baa](../openspec/specs/clinic-baa/spec.md) | P0-09 |
 | [vendor-baa-matrix](../openspec/specs/vendor-baa-matrix/spec.md) | P0-10 |
+| [risk-assessment](../openspec/specs/risk-assessment/spec.md) | P0-11 |
 
 ---
 
@@ -190,10 +191,26 @@ Also updated by P0-10:
 - `dental-ai-tasks/DECISIONS.md`: #307 (matrix design, gate CLOSED), #308 (no CODEOWNERS file yet, hand-offs for P1-01/P1-06 in the README).
 - `docs/phase-0-discovery-compliance/README.md`: #11 status.
 
+### ✅ P0-11 Risk assessment v1 (#12)
+| File | What it's for |
+|---|---|
+| [docs/compliance/risk/risk-assessment-v1.md](compliance/risk/risk-assessment-v1.md) | **Main file:** scope, scoring method, where patient data lives and flows, results, gap decisions, review triggers, sign-off |
+| [docs/compliance/risk/risk-register.md](compliance/risk/risk-register.md) | The 38 risks: what can go wrong, how bad, which task prevents it |
+| [docs/compliance/risk/safeguard-coverage.md](compliance/risk/safeguard-coverage.md) | Every HIPAA Security Rule standard → risks and controls |
+| [docs/compliance/risk/accepted-risks.md](compliance/risk/accepted-risks.md) | Rules for accepting a risk (none accepted) |
+| `scripts/compliance/check_risk_register.py` | Checks task IDs exist and aren't merged, score math, High risks covered, every PHI vendor named |
+| `openspec/changes/archive/2026-11-26-p0-11-risk-assessment/` | The task plan (archived) |
+
+Also updated by P0-11:
+- `docs/compliance/baa-google-cloud.md`, `baa-google-workspace.md`, `baa-meta-whatsapp.md`, `baa-twilio.md`, `baa-clinic-example-dental.md`: legal review pending under R29.
+- `docs/compliance/sources/README.md`: sources K1–K6 (eCFR safeguard sections, HHS guidance, Federal Register).
+- `dental-ai-tasks/DECISIONS.md`: #309 (register v1), #310 (gap decisions), #311 (mock reviews, R29 pending, public-repo detail level).
+- `docs/compliance/README.md`: risk folder, notifications for P5-12, P5-14, P0-14 and control owners.
+- `docs/phase-0-discovery-compliance/README.md`: #12 status.
+
 ### ⬜ Rest of Phase 0 (planned outputs from the Phase 0 dashboard)
 | Task | Will create | What it'll be for |
 |---|---|---|
-| P0-11 (#12) | `docs/compliance/risk/` | HIPAA risk assessment v1 |
 | P0-12 (#13) | `scripts/open_dental/`, `docs/integrations/open-dental-test-db.md` | Open Dental API keys (in Secret Manager, never in the repo) and the test database |
 | P0-13 (#14) | `docs/adr/0001-gemini-models.md`, `evals/spike/p0-13/` | Which Gemini model versions we use per tier, and the test results |
 | P0-14 (#15) | `docs/architecture/` | Architecture document and patient-data flow diagram |

@@ -13,7 +13,7 @@
 | Status | **NOT SIGNED** (paper record) |
 | Clinic signatory | Dr. Casey Example, dentist/owner (P0-01 decision log) |
 | Our signatory | - (a person with authority to bind the company; to be named by Morgan Lead, sponsor) |
-| Counsel review | **Pending: no counsel engaged.** Not simulated. |
+| Counsel review | **Pending: no counsel engaged.** Not simulated. Checked 2026-11-26 in P0-11 (risks R29, R30 in the [risk register](risk/risk-register.md)). |
 | Compliance advisor review | Sam Comply, 2026-11-26 (below) |
 | Tech lead feasibility | Riley Tech, 2026-11-26 (in [commitments.md](baa/commitments.md)) |
 | Sent to clinic | Draft shared for comment with Dr. Casey Example (signatory) and Alex Sample (SME), advisor copied, 2026-11-26. Not sent for signature. |

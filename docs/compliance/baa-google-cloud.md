@@ -14,7 +14,7 @@
 | Project to opt in from | `dai-rcpt-ops` |
 | Scope | Still to confirm in the accepted text. The HIPAA page says: "The HIPAA BAA for Google Cloud includes the entire Google Cloud infrastructure, not only a subset of Google Cloud." The opt-in page says it's enough to opt in from one project in the account. |
 | Saved copy | - (to go in `docs/compliance/agreements/google-cloud-baa-YYYY-MM-DD.pdf` once accepted; the repo is public, so decide first whether the PDF belongs in the repo or in a private drive) |
-| Legal review of terms | Pending (compliance advisor), tracked in P0-11 |
+| Legal review of terms | **Pending** (checked 2026-11-26 in P0-11): no BAA text accepted yet and no counsel engaged. Tracked as risk R29 ([risk register](risk/risk-register.md)); record "done YYYY-MM-DD by <name>" here when counsel has reviewed the accepted text. |
 | Covered-products snapshot | 2026-11-26, below |
 
 ## How to accept (when the company decides to)

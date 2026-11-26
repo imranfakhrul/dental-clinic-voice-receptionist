@@ -13,7 +13,7 @@
 | Authority confirmed by | - |
 | Scope | - |
 | Saved copy | - (decide before signing whether the PDF goes in the repo or a private drive; the repo is public) |
-| Legal review of terms | Pending (compliance advisor), P0-11 |
+| Legal review of terms | **Pending** (checked 2026-11-26 in P0-11): no BAA text accepted yet and no counsel engaged. Tracked as risk R29 ([risk register](risk/risk-register.md)); record "done YYYY-MM-DD by <name>" here when counsel has reviewed the accepted text. |
 | Covered products relied on | **WhatsApp Business Platform Cloud API** message content and metadata. Today Meta's terms §4.2 say Meta "is not a Business Associate or Subcontractor" and the platform "is not HIPAA compliant" (S1, page modified 2026-09-23). |
 | Edition/plan required for BAA | - (none offered) |
 | Channels allowed by P0-07a | WhatsApp: testing only, synthetic data (`allowed_with_phi: false`). Production WhatsApp only after this record says ACCEPTED (`phi_gate`), else SMS fallback. `messaging_policy.yaml` decision_version 1.2 |
